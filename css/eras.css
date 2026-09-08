@@ -1,0 +1,542 @@
+/* ============================================================
+   ERAS — una paleta y un mundo visual por pantalla
+   ============================================================ */
+
+/* ---------- 0 · Harry Styles (2017) · rosa vino ---------- */
+body[data-era="0"] {
+  --bg:        oklch(0.34 0.115 12);
+  --bg-2:      oklch(0.24 0.090 10);
+  --ink:       oklch(0.97 0.020 30);
+  --ink-dim:   oklch(0.85 0.055 20);
+  --accent:    oklch(0.84 0.095 355);
+  --accent-2:  oklch(0.70 0.130 25);
+  --on-accent: oklch(0.28 0.100 12);
+  --wdth: 84;
+}
+
+/* ---------- 1 · Fine Line (2019) · fucsia ---------- */
+body[data-era="1"] {
+  --bg:        oklch(0.66 0.200 352);
+  --bg-2:      oklch(0.55 0.190 350);
+  --ink:       oklch(0.19 0.080 330);
+  --ink-dim:   oklch(0.245 0.090 335);
+  --accent:    oklch(0.365 0.165 262);
+  --accent-2:  oklch(0.88 0.120 95);
+  --on-accent: oklch(0.98 0.010 260);
+  --wdth: 100;
+}
+
+/* ---------- 2 · Harry's House (2022) · celeste ---------- */
+body[data-era="2"] {
+  --bg:        oklch(0.80 0.105 230);
+  --bg-2:      oklch(0.88 0.070 225);
+  --ink:       oklch(0.26 0.065 250);
+  --ink-dim:   oklch(0.40 0.075 250);
+  --accent:    oklch(0.510 0.150 72);
+  --accent-2:  oklch(0.68 0.170 42);
+  --on-accent: oklch(0.980 0.010 80);
+  --wdth: 92;
+}
+
+/* ---------- 3 · Harry's House · patio · ámbar ---------- */
+body[data-era="3"] {
+  --bg:        oklch(0.76 0.145 62);
+  --bg-2:      oklch(0.84 0.110 70);
+  --ink:       oklch(0.24 0.070 40);
+  --ink-dim:   oklch(0.37 0.080 45);
+  --accent:    oklch(0.42 0.110 240);
+  --accent-2:  oklch(0.55 0.150 25);
+  --on-accent: oklch(0.98 0.008 240);
+  --wdth: 88;
+}
+
+/* ---------- 4 · Love On Tour · negro ciruela ---------- */
+body[data-era="4"] {
+  --bg:        oklch(0.155 0.035 320);
+  --bg-2:      oklch(0.100 0.025 320);
+  --ink:       oklch(0.97 0.012 320);
+  --ink-dim:   oklch(0.80 0.030 320);
+  --accent:    oklch(0.75 0.185 350);
+  --accent-2:  oklch(0.83 0.130 88);
+  --on-accent: oklch(0.16 0.050 340);
+  --wdth: 96;
+}
+
+/* ---------- 5 · Kiss All the Time (2026) · anochecer ---------- */
+body[data-era="5"] {
+  --bg:        oklch(0.22 0.085 272);
+  --bg-2:      oklch(0.34 0.125 322);
+  --ink:       oklch(0.98 0.010 300);
+  --ink-dim:   oklch(0.82 0.040 300);
+  --accent:    oklch(0.75 0.190 350);
+  --accent-2:  oklch(0.82 0.115 200);
+  --on-accent: oklch(0.18 0.060 330);
+  --wdth: 100;
+}
+
+/* El anochecer va en una capa propia detrás del canvas de luces, no en la
+   sección: si lo pintáramos sobre .era--dusk taparía las luces. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 620ms var(--ease-quart);
+  background:
+    radial-gradient(120% 80% at 50% 108%, color-mix(in oklch, var(--bg-2) 92%, transparent), transparent 72%),
+    radial-gradient(90% 60% at 50% -12%, color-mix(in oklch, var(--accent) 24%, transparent), transparent 70%);
+}
+body[data-era="5"]::before { opacity: 1; }
+
+/* ============================================================
+   0 · BANDEJA, VINILO Y PÚA
+   ============================================================ */
+
+.turntable {
+  position: relative;
+  width: min(66vw, 15.5rem);
+  aspect-ratio: 1;
+  margin-block: var(--s2);
+}
+
+.vinyl {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  animation: spin 6s linear infinite;
+  background:
+    radial-gradient(circle at 34% 30%, color-mix(in oklch, var(--accent) 45%, transparent) 0 12%, transparent 46%),
+    repeating-radial-gradient(circle at 50% 50%,
+      oklch(0.16 0.03 10) 0 2px,
+      oklch(0.22 0.04 12) 2px 4px),
+    oklch(0.14 0.02 10);
+  box-shadow:
+    0 1.5rem 3rem -1rem oklch(0.10 0.03 10 / 0.7),
+    inset 0 0 0 1px color-mix(in oklch, var(--accent) 30%, transparent);
+}
+
+.vinyl::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg 40deg,
+    color-mix(in oklch, var(--accent) 30%, transparent) 62deg,
+    transparent 84deg 220deg,
+    color-mix(in oklch, var(--ink) 18%, transparent) 244deg,
+    transparent 268deg 360deg);
+  mix-blend-mode: screen;
+}
+
+.vinyl__label {
+  position: absolute;
+  inset: 33%;
+  border-radius: 50%;
+  display: grid;
+  place-content: center;
+  gap: 0.15rem;
+  text-align: center;
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: inset 0 0 0 1px oklch(0.20 0.05 10 / 0.35);
+}
+.vinyl__label::after {
+  content: "";
+  position: absolute;
+  inset: 46%;
+  border-radius: 50%;
+  background: oklch(0.14 0.02 10);
+}
+.vinyl__side, .vinyl__rpm {
+  font-family: "Chivo Mono", ui-monospace, monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.06em;
+  opacity: 0.72;
+}
+.vinyl__name {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-weight: 800;
+  font-size: clamp(0.7rem, 3.4vw, 0.95rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  max-width: 6ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tonearm {
+  position: absolute;
+  top: -6%;
+  right: -12%;
+  width: 62%;
+  height: 62%;
+  transform-origin: 88% 12%;
+  transform: rotate(-26deg);
+  transition: transform 1400ms var(--ease-expo);
+}
+.tonearm.is-down { transform: rotate(6deg); }
+
+.tonearm__pivot {
+  position: absolute;
+  top: 0; right: 0;
+  width: 22%; aspect-ratio: 1;
+  border-radius: 50%;
+  background: linear-gradient(150deg, var(--ink), color-mix(in oklch, var(--ink) 55%, var(--bg)));
+  box-shadow: 0 0.35rem 1rem -0.3rem oklch(0.12 0.03 10 / 0.6);
+}
+.tonearm__wand {
+  position: absolute;
+  top: 9%; right: 10%;
+  width: 78%; height: 5%;
+  border-radius: 999px;
+  transform-origin: right center;
+  transform: rotate(34deg);
+  background: linear-gradient(90deg, color-mix(in oklch, var(--ink) 78%, var(--bg)), var(--ink));
+}
+.tonearm__head {
+  position: absolute;
+  left: -2%; top: -85%;
+  width: 16%; height: 260%;
+  border-radius: 3px;
+  background: var(--accent);
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ============================================================
+   1 · LENTE (Fine Line)
+   ============================================================ */
+
+.lens {
+  position: relative;
+  width: min(74vw, 18rem);
+  aspect-ratio: 1;
+  margin-block: var(--s2) var(--s3);
+}
+
+.lens__ring {
+  position: absolute;
+  inset: -14%;
+  width: 128%;
+  height: 128%;
+  animation: spin 26s linear infinite;
+  overflow: visible;
+}
+.lens__text {
+  font-family: "Chivo Mono", ui-monospace, monospace;
+  font-size: 15px;
+  letter-spacing: 0.14em;
+  fill: var(--ink-dim);
+}
+
+.lens__glass {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--bg-2);
+  box-shadow:
+    inset 0 0 0 3px color-mix(in oklch, var(--ink) 85%, transparent),
+    inset 0 -2rem 4rem -1rem color-mix(in oklch, var(--ink) 45%, transparent),
+    0 1.5rem 3.5rem -1.5rem color-mix(in oklch, var(--ink) 60%, transparent);
+}
+.lens__media { position: absolute; inset: 0; }
+.lens__media img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  /* la exageración de escala hace el efecto de lente sin filtros frágiles */
+  transform: scale(1.16);
+}
+.lens__flare {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  background:
+    radial-gradient(closest-side at 30% 24%, color-mix(in oklch, white 55%, transparent), transparent 62%),
+    radial-gradient(closest-side at 74% 82%, color-mix(in oklch, var(--accent) 40%, transparent), transparent 58%);
+  mix-blend-mode: screen;
+}
+
+.age {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-family: "Bricolage Grotesque", sans-serif;
+}
+.age__num {
+  font-size: clamp(2.5rem, 11vw, 4.5rem);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  color: var(--accent);
+}
+.age__word { font-size: var(--fs-lede); font-weight: 600; color: var(--ink-dim); }
+
+/* ============================================================
+   2 · CASA INVERTIDA, TICKET Y ODÓMETRO
+   ============================================================ */
+
+.house {
+  width: min(42vw, 9.5rem);
+  height: auto;
+  align-self: center;
+  animation: float 7s ease-in-out infinite;
+  overflow: visible;
+  filter: drop-shadow(0 1.25rem 1.5rem color-mix(in oklch, var(--ink) 22%, transparent));
+}
+.house__roof { fill: var(--accent-2); }
+.house__body { fill: var(--ink); }
+.house__door { fill: var(--bg); }
+.house__knob { fill: var(--ink); }
+.house__win  { fill: var(--accent); }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+  50%      { transform: translateY(-0.9rem) rotate(1.5deg); }
+}
+
+.ticket {
+  position: relative;
+  width: 100%;
+  padding: var(--s3) var(--s4);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  background: color-mix(in oklch, var(--ink) 6%, transparent);
+}
+.ticket__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed var(--line);
+}
+.ticket__row:last-of-type { border-bottom: 0; }
+.ticket__k {
+  font-family: "Chivo Mono", ui-monospace, monospace;
+  font-size: var(--fs-xs);
+  color: var(--ink-dim);
+}
+.ticket__v {
+  font-family: "Chivo Mono", ui-monospace, monospace;
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  text-align: right;
+}
+.ticket__perf::before,
+.ticket__perf::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 1.25rem; height: 1.25rem;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1.5px solid var(--line);
+  transform: translateY(-50%);
+}
+.ticket__perf::before { left: -0.7rem; clip-path: inset(0 0 0 50%); }
+.ticket__perf::after  { right: -0.7rem; clip-path: inset(0 50% 0 0); }
+
+.countdown { width: 100%; }
+.countdown__title {
+  font-family: "Chivo Mono", ui-monospace, monospace;
+  font-size: var(--fs-xs);
+  color: var(--ink-dim);
+  margin-bottom: 0.4rem;
+}
+
+.odo { display: flex; align-items: flex-end; gap: clamp(0.5rem, 2.5vw, 1rem); flex-wrap: wrap; }
+.odo__unit { display: flex; flex-direction: column; gap: 0.15rem; }
+.odo__digits {
+  display: flex;
+  height: 1em;
+  overflow: hidden;
+  font-family: "Chivo Mono", ui-monospace, monospace;
+  font-weight: 600;
+  font-size: clamp(1.9rem, 8.5vw, 3rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.odo__reel {
+  display: flex;
+  flex-direction: column;
+  transform: translateY(calc(var(--d, 0) * -1em));
+  transition: transform 680ms var(--ease-expo);
+}
+.odo__reel > span { height: 1em; display: block; }
+.odo__label {
+  font-family: "Chivo Mono", ui-monospace, monospace;
+  font-size: var(--fs-xs);
+  color: var(--ink-dim);
+}
+
+/* ============================================================
+   3 · MAPA
+   ============================================================ */
+
+.map {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1.5px solid var(--line);
+  background: color-mix(in oklch, var(--ink) 7%, transparent);
+}
+.map__road {
+  position: absolute;
+  background: color-mix(in oklch, var(--bg) 78%, var(--ink));
+  border-radius: 2px;
+}
+.map__road--a { left: -10%; right: -10%; top: 44%; height: 9%; transform: rotate(-6deg); }
+.map__road--b { top: -20%; bottom: -20%; left: 26%; width: 7%; transform: rotate(9deg); }
+.map__road--c { left: -10%; right: 40%; top: 74%; height: 5%; transform: rotate(4deg); }
+.map__park {
+  position: absolute;
+  right: 8%; top: 12%;
+  width: 26%; height: 30%;
+  border-radius: 10px;
+  background: color-mix(in oklch, var(--accent) 30%, transparent);
+}
+.map__pin {
+  position: absolute;
+  left: 50%; top: 47%;
+  width: 1.1rem; height: 1.1rem;
+  margin: -0.55rem 0 0 -0.55rem;
+  border-radius: 50%;
+  background: var(--accent-2);
+  box-shadow: 0 0 0 4px color-mix(in oklch, var(--bg) 80%, transparent);
+}
+.map__pulse {
+  position: absolute;
+  inset: -0.35rem;
+  border-radius: 50%;
+  border: 2px solid var(--accent-2);
+  animation: pulse 2.6s var(--ease-quart) infinite;
+}
+@keyframes pulse {
+  0%   { transform: scale(0.6); opacity: 0.9; }
+  100% { transform: scale(3.4); opacity: 0; }
+}
+
+/* ============================================================
+   4 · REFLECTOR Y GALERÍA
+   ============================================================ */
+
+.spotlight {
+  /* fija, no absoluta: la sección puede desplazarse y el reflector tiene que
+     seguir cubriendo la pantalla. Al estar dentro de una era oculta, hereda
+     visibility:hidden y no se ve en las demás. */
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle 32vmax at var(--mx, 50%) var(--my, 34%),
+      color-mix(in oklch, var(--accent) 26%, transparent), transparent 68%),
+    radial-gradient(circle 22vmax at calc(100% - var(--mx, 50%)) 78%,
+      color-mix(in oklch, var(--accent-2) 18%, transparent), transparent 70%);
+}
+
+.gallery {
+  display: flex;
+  gap: var(--s3);
+  width: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: var(--s2) var(--s4);
+  margin-inline: calc(var(--s4) * -1);
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.gallery::-webkit-scrollbar { display: none; }
+
+.shot {
+  position: relative;
+  flex: 0 0 min(68vw, 15.5rem);
+  aspect-ratio: 3 / 4;
+  scroll-snap-align: center;
+  border-radius: 12px;
+  overflow: hidden;
+  transform: rotate(var(--r, 0deg));
+  transition: transform 480ms var(--ease-expo);
+  box-shadow:
+    0 1.5rem 3rem -1.25rem oklch(0 0 0 / 0.7),
+    0 0 0 1px color-mix(in oklch, var(--accent) 35%, transparent);
+}
+.shot:hover, .shot:focus-within { transform: rotate(0deg) translateY(-0.4rem); }
+.shot img { width: 100%; height: 100%; object-fit: cover; }
+.shot__n {
+  position: absolute;
+  left: 0.6rem; bottom: 0.55rem;
+  font-family: "Chivo Mono", ui-monospace, monospace;
+  font-size: 0.6875rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  color: var(--ink);
+  background: oklch(0 0 0 / 0.55);
+  backdrop-filter: blur(6px);
+}
+
+/* ============================================================
+   5 · BOLA DE DISCO
+   ============================================================ */
+
+.ball {
+  position: relative;
+  width: min(44vw, 11rem);
+  aspect-ratio: 1;
+  margin-block: var(--s2);
+}
+.ball__sphere {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  animation: spin 14s linear infinite;
+  background:
+    radial-gradient(circle at 32% 26%, oklch(1 0 0 / 0.85) 0 6%, transparent 44%),
+    repeating-conic-gradient(from 0deg,
+      color-mix(in oklch, var(--accent) 55%, transparent) 0deg 6deg,
+      color-mix(in oklch, var(--accent-2) 45%, transparent) 6deg 12deg),
+    repeating-linear-gradient(0deg,
+      oklch(0 0 0 / 0.42) 0 1.5%,
+      transparent 1.5% 7%),
+    var(--bg-2);
+  box-shadow:
+    inset -1.2rem -1.2rem 2.5rem oklch(0 0 0 / 0.55),
+    0 0 3rem color-mix(in oklch, var(--accent) 45%, transparent);
+}
+.ball__glow {
+  position: absolute;
+  inset: -60%;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, color-mix(in oklch, var(--accent) 34%, transparent), transparent 62%);
+  transform: scale(calc(0.85 + var(--energy, 0) * 0.5));
+  opacity: calc(0.45 + var(--energy, 0) * 0.55);
+  transition: transform 120ms linear, opacity 120ms linear;
+}
+
+.btn--wa {
+  background: oklch(0.72 0.175 152);
+  color: oklch(0.16 0.04 152);
+  box-shadow: 0 0.75rem 2.5rem -0.75rem oklch(0.72 0.175 152 / 0.6);
+}
+.btn--wa:hover { background: oklch(0.76 0.175 152); }
+
+/* ============================================================
+   MOVIMIENTO REDUCIDO
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .vinyl, .lens__ring, .ball__sphere, .house, .map__pulse { animation: none !important; }
+  .tonearm { transition: none; }
+  .ball__glow { transform: none; opacity: 0.6; }
+}

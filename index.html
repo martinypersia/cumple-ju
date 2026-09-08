@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Una fiesta en cinco eras</title>
+<meta name="description" content="Cinco pantallas, cinco eras, un cumpleaños. Bajá la púa.">
+<meta name="theme-color" content="#5a1f30">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Una fiesta en cinco eras">
+<meta property="og:description" content="Cinco pantallas, cinco eras, un cumpleaños. Bajá la púa.">
+<meta property="og:image" content="assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Chivo+Mono:wght@300..700&family=Figtree:wght@300..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/eras.css">
+</head>
+<body data-era="0">
+
+<canvas id="fx" class="fx" aria-hidden="true"></canvas>
+<div class="grain" aria-hidden="true"></div>
+
+<main class="deck" id="deck">
+
+  <!-- 0 - HARRY STYLES (2017) - PORTADA -->
+  <section class="era era--rose is-active" id="era-0" data-era="0" aria-label="Portada">
+    <div class="era__inner era__inner--center">
+      <p class="overline" data-reveal>Esto no es un flyer</p>
+
+      <div class="turntable" data-reveal>
+        <div class="vinyl" id="vinyl">
+          <div class="vinyl__label">
+            <span class="vinyl__side">lado A</span>
+            <span class="vinyl__name" data-bind="nombre">[NOMBRE]</span>
+            <span class="vinyl__rpm">33 rpm</span>
+          </div>
+        </div>
+        <div class="tonearm" id="tonearm" aria-hidden="true">
+          <div class="tonearm__pivot"></div>
+          <div class="tonearm__wand"><div class="tonearm__head"></div></div>
+        </div>
+      </div>
+
+      <h1 class="display display--xl" data-reveal>Una fiesta<br>en cinco eras</h1>
+      <p class="lede" data-reveal>Andá subiendo el volumen. Esto tiene banda sonora.</p>
+
+      <button class="btn btn--hero" id="start" data-reveal>
+        <span class="btn__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3v18l14-9z" fill="currentColor"/></svg>
+        </span>
+        <span class="btn__label">Bajar la púa</span>
+      </button>
+      <p class="fineprint" data-reveal>Se escucha mejor con sonido. Lo podés silenciar cuando quieras.</p>
+    </div>
+  </section>
+
+  <!-- 1 - FINE LINE (2019) - QUIEN -->
+  <section class="era era--fuchsia" id="era-1" data-era="1" hidden aria-label="Quién cumple">
+    <div class="era__inner era__inner--center">
+      <div class="lens" data-reveal>
+        <svg class="lens__ring" viewBox="0 0 300 300" aria-hidden="true">
+          <defs><path id="lensCircle" d="M150,150 m-132,0 a132,132 0 1,1 264,0 a132,132 0 1,1 -264,0"/></defs>
+          <text class="lens__text"><textPath href="#lensCircle" startOffset="0">cumple años · cumple años · cumple años · cumple años ·</textPath></text>
+        </svg>
+        <div class="lens__glass">
+          <div class="lens__media" id="lensMedia">
+            <div class="ph ph--round">
+              <span class="ph__label">foto principal</span>
+              <span class="ph__hint">CONFIG.fotoPrincipal</span>
+            </div>
+          </div>
+          <div class="lens__flare" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <h2 class="display display--name" data-bind="nombre" data-reveal>[NOMBRE]</h2>
+      <p class="age" id="age" data-reveal hidden><span class="age__num" data-bind="edad"></span><span class="age__word">años</span></p>
+      <p class="lede" data-joke="quien" data-reveal>Cumple años y decidió que eso es un problema de todos. Bien ahí.</p>
+
+      <button class="btn" data-next data-reveal>¿Cuándo es?</button>
+    </div>
+  </section>
+
+  <!-- 2 - HARRY'S HOUSE (2022) - CUANDO -->
+  <section class="era era--sky" id="era-2" data-era="2" hidden aria-label="Cuándo es">
+    <div class="era__inner">
+      <svg class="house" viewBox="0 0 200 170" aria-hidden="true" data-reveal>
+        <path class="house__roof" d="M100 166 L14 84 L186 84 Z"/>
+        <rect class="house__body" x="40" y="10" width="120" height="74" rx="3"/>
+        <rect class="house__door" x="86" y="10" width="28" height="44" rx="2"/>
+        <circle class="house__knob" cx="107" cy="34" r="2.6"/>
+        <rect class="house__win" x="54" y="22" width="22" height="22" rx="2"/>
+        <rect class="house__win" x="124" y="22" width="22" height="22" rx="2"/>
+      </svg>
+
+      <p class="overline" data-reveal>La casa está dada vuelta, la fecha no</p>
+      <h2 class="display display--lg" data-reveal>Anotala ahora<br>y no te hagas el sota</h2>
+
+      <div class="ticket" data-reveal>
+        <div class="ticket__row"><span class="ticket__k">día</span><span class="ticket__v" data-bind="diaLargo">—</span></div>
+        <div class="ticket__row"><span class="ticket__k">hora</span><span class="ticket__v" data-bind="hora">—</span></div>
+        <div class="ticket__row"><span class="ticket__k">hasta</span><span class="ticket__v" data-bind="horaFin">—</span></div>
+        <span class="ticket__perf" aria-hidden="true"></span>
+      </div>
+
+      <div class="countdown" data-reveal>
+        <p class="countdown__title" id="cdTitle">Falta</p>
+        <div class="odo" id="odo" aria-hidden="true"></div>
+        <p class="sr-only" id="cdText" role="timer" aria-live="off"></p>
+      </div>
+
+      <p class="lede" data-joke="cuando" data-reveal>Si llegás tarde no pasa nada, pero la torta no espera.</p>
+      <button class="btn" data-next data-reveal>¿Dónde es?</button>
+    </div>
+  </section>
+
+  <!-- 3 - HARRY'S HOUSE / PATIO - DONDE -->
+  <section class="era era--amber" id="era-3" data-era="3" hidden aria-label="Dónde es">
+    <div class="era__inner">
+      <p class="overline" data-reveal>El lugar</p>
+      <h2 class="display display--lg" data-bind="lugarNombre" data-reveal>[NOMBRE DEL LUGAR]</h2>
+
+      <div class="map" data-reveal aria-hidden="true">
+        <div class="map__road map__road--a"></div>
+        <div class="map__road map__road--b"></div>
+        <div class="map__road map__road--c"></div>
+        <div class="map__park"></div>
+        <div class="map__pin"><span class="map__pulse"></span></div>
+      </div>
+
+      <address class="addr" data-bind="direccion" data-reveal>[Calle 1234, Ciudad]</address>
+      <p class="lede" data-joke="donde" data-reveal>Está más cerca de lo que estás pensando.</p>
+
+      <a class="btn btn--solid" id="maps" href="#" target="_blank" rel="noopener" data-reveal>Abrir en Google Maps</a>
+      <button class="btn btn--ghost" data-next data-reveal>Ver las pruebas</button>
+    </div>
+  </section>
+
+  <!-- 4 - LOVE ON TOUR - GALERIA -->
+  <section class="era era--stage" id="era-4" data-era="4" hidden aria-label="Galería de fotos">
+    <div class="spotlight" id="spotlight" aria-hidden="true"></div>
+    <div class="era__inner era__inner--wide">
+      <p class="overline" data-reveal>Antecedentes</p>
+      <h2 class="display display--lg" data-joke="galeria" data-reveal>Pruebas de que<br>sabemos festejar</h2>
+
+      <div class="gallery" id="gallery" data-reveal></div>
+
+      <p class="fineprint" data-reveal>Deslizá para ver el resto.</p>
+      <button class="btn" data-next data-reveal>Ir al final</button>
+    </div>
+  </section>
+
+  <!-- 5 - KISS ALL THE TIME (2026) - CIERRE -->
+  <section class="era era--dusk" id="era-5" data-era="5" hidden aria-label="Entrar al grupo">
+    <div class="era__inner era__inner--center">
+      <div class="ball" id="ball" data-reveal aria-hidden="true">
+        <div class="ball__sphere"></div>
+        <div class="ball__glow"></div>
+      </div>
+
+      <p class="overline" data-reveal>Disco, occasionally</p>
+      <h2 class="display display--xl" data-reveal>El after<br>empieza acá</h2>
+      <p class="lede" data-joke="cierre" data-reveal>Entrar al grupo cuenta como confirmar. No hay formulario, no hay lista, no hay excusa.</p>
+
+      <a class="btn btn--hero btn--wa" id="wa" href="#" target="_blank" rel="noopener" data-reveal>
+        <span class="btn__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2Zm5.8 14.16c-.25.69-1.44 1.32-1.98 1.36-.53.05-1.02.24-3.45-.72-2.9-1.14-4.74-4.1-4.88-4.29-.14-.19-1.16-1.54-1.16-2.94s.73-2.09.99-2.37c.26-.29.57-.36.76-.36l.54.01c.17 0 .41-.07.64.49.24.58.81 2 .88 2.14.07.14.12.31.02.5-.1.19-.15.31-.29.48-.14.17-.3.38-.43.51-.14.14-.29.29-.13.57.17.29.74 1.22 1.59 1.98 1.09.97 2.01 1.27 2.3 1.41.29.14.45.12.62-.07.17-.19.71-.83.9-1.12.19-.29.38-.24.64-.14.26.1 1.65.78 1.93.92.29.14.48.21.55.33.07.12.07.69-.18 1.38Z"/></svg>
+        </span>
+        <span class="btn__label">Entrar al grupo</span>
+      </a>
+      <p class="fineprint" id="waFallback" hidden>Falta cargar el link del grupo en <code>js/config.js</code>.</p>
+
+      <button class="btn btn--ghost" id="replay">Volver al principio</button>
+    </div>
+  </section>
+
+</main>
+
+<nav class="dots" id="dots" aria-label="Progreso del recorrido"></nav>
+
+<button class="mute" id="mute" hidden aria-pressed="false">
+  <span class="sr-only">Silenciar la música</span>
+  <svg class="mute__on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+  <svg class="mute__off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="m16 9 5 6"/><path d="m21 9-5 6"/></svg>
+</button>
+
+<audio id="track" loop preload="auto"></audio>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+Dejá acá el MP3 y poné su nombre en js/config.js (campo "audio").
+
+Sugerencia: exportalo a 128 kbps mono o 160 kbps estéreo.
+Un tema de 3 minutos pesa asi ~3 MB, que es lo maximo razonable
+para que cargue rapido con datos moviles.

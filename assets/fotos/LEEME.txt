@@ -1,0 +1,9 @@
+Deja aca las fotos y listalas en js/config.js (campo "fotos").
+
+Para prepararlas automaticamente (redimensionar + convertir a WebP):
+  npm install
+  npm run fotos
+
+El script deja los originales intactos, escribe las versiones
+optimizadas en assets/fotos/web/ y te imprime el array listo
+para pegar en js/config.js.
