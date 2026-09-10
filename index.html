@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Una fiesta en cinco eras</title>
-<meta name="description" content="Cinco pantallas, cinco eras, un cumpleaños. Bajá la púa.">
-<meta name="theme-color" content="#5a1f30">
+<title>Juli cumple · Una fiesta en cinco eras</title>
+<meta name="description" content="Sábado 3 de octubre, 12 h. Cinco eras de Harry, un cumpleaños. Abrila con sonido.">
+<meta name="theme-color" content="#e9a3bc">
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="Una fiesta en cinco eras">
-<meta property="og:description" content="Cinco pantallas, cinco eras, un cumpleaños. Bajá la púa.">
+<meta property="og:title" content="Juli cumple · Una fiesta en cinco eras">
+<meta property="og:description" content="Sábado 3 de octubre, 12 h. Cinco eras de Harry, un cumpleaños. Abrila con sonido.">
 <meta property="og:image" content="assets/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -29,33 +29,26 @@
 
 <main class="deck" id="deck">
 
-  <!-- 0 - HARRY STYLES (2017) - PORTADA -->
-  <section class="era era--rose is-active" id="era-0" data-era="0" aria-label="Portada">
-    <div class="era__inner era__inner--center">
-      <p class="overline" data-reveal>Esto no es un flyer</p>
+  <!-- 0 - HARRY STYLES (2017) - PORTADA: "JULI STYLES", EL DISCO DEBUT -->
+  <section class="era era--water is-active" id="era-0" data-era="0" aria-label="Portada">
+    <canvas class="water" id="water" aria-hidden="true"></canvas>
+    <div class="era__inner era__inner--cover">
+      <p class="sticker" data-reveal>edición limitada<br>una sola fecha</p>
 
-      <div class="turntable" data-reveal>
-        <div class="vinyl" id="vinyl">
-          <div class="vinyl__label">
-            <span class="vinyl__side">lado A</span>
-            <span class="vinyl__name" data-bind="nombre">[NOMBRE]</span>
-            <span class="vinyl__rpm">33 rpm</span>
-          </div>
-        </div>
-        <div class="tonearm" id="tonearm" aria-hidden="true">
-          <div class="tonearm__pivot"></div>
-          <div class="tonearm__wand"><div class="tonearm__head"></div></div>
-        </div>
-      </div>
+      <p class="overline" data-reveal>El disco debut</p>
+      <h1 class="display display--cover" data-reveal>
+        <span data-bind="nombre">Juli</span>
+        <span>Styles</span>
+      </h1>
+      <p class="cover__date" data-reveal>En vivo el <span data-bind="diaCorto">sábado 3 de octubre</span></p>
 
-      <h1 class="display display--xl" data-reveal>Una fiesta<br>en cinco eras</h1>
-      <p class="lede" data-reveal>Andá subiendo el volumen. Esto tiene banda sonora.</p>
+      <p class="lede" data-reveal>Subí el volumen y tocá el agua.</p>
 
       <button class="btn btn--hero" id="start" data-reveal>
         <span class="btn__icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3v18l14-9z" fill="currentColor"/></svg>
         </span>
-        <span class="btn__label">Bajar la púa</span>
+        <span class="btn__label">Meterse al agua</span>
       </button>
       <p class="fineprint" data-reveal>Se escucha mejor con sonido. Lo podés silenciar cuando quieras.</p>
     </div>
@@ -166,7 +159,7 @@
       </div>
 
       <p class="overline" data-reveal>Disco, occasionally</p>
-      <h2 class="display display--xl" data-reveal>El after<br>empieza acá</h2>
+      <h2 class="display display--xl" data-reveal>La previa<br>empieza acá</h2>
       <p class="lede" data-joke="cierre" data-reveal>Entrar al grupo cuenta como confirmar. No hay formulario, no hay lista, no hay excusa.</p>
 
       <a class="btn btn--hero btn--wa" id="wa" href="#" target="_blank" rel="noopener" data-reveal>

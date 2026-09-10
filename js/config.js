@@ -6,13 +6,13 @@
 
 export const CONFIG = {
   // --- Quién ---
-  nombre: "[NOMBRE]",
+  nombre: "Juli",
+  nombreCompleto: "Julieta",
   edad: null, // un número, o null para no mostrar la edad
 
   // --- Cuándo ---
   // Formato ISO con huso horario. Argentina es -03:00.
-  // Ejemplo real: "2026-11-14T22:00:00-03:00"
-  fecha: "2026-12-31T22:00:00-03:00",
+  fecha: "2026-10-03T12:00:00-03:00", // sábado 3 de octubre, mediodía
   horaFin: "[hasta que aguantemos]",
 
   // --- Dónde ---
@@ -32,7 +32,7 @@ export const CONFIG = {
   // --- Música ---
   // Dejá tu MP3 en assets/audio/ y poné el nombre acá.
   // Si el archivo no existe, la invitación funciona igual, en silencio.
-  audio: "assets/audio/tema.mp3",
+  audio: "assets/audio/dancenomore.mp3",
 
   // --- Fotos ---
   // Dejá las fotos en assets/fotos/ y listalas acá.

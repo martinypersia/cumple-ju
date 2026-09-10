@@ -16,9 +16,9 @@ Todo en OKLCH. La semilla `oklch(0.42 0.163 350)` ancla la era de apertura; el r
 
 | Era | Rol | Valor |
 |---|---|---|
-| **0 · Harry Styles (2017)** | bg | `oklch(0.34 0.115 12)` rosa vino |
-| | ink | `oklch(0.96 0.022 30)` |
-| | accent | `oklch(0.84 0.095 355)` rosa empolvado |
+| **0 · Harry Styles (2017)** | bg | `oklch(0.790 0.088 356)` agua rosa (el canvas va de `0.890` arriba a `0.790` abajo) |
+| | ink | `oklch(0.270 0.095 8)` vino |
+| | accent | `oklch(0.340 0.120 8)` vino, botón |
 | **1 · Fine Line (2019)** | bg | `oklch(0.55 0.215 355)` fucsia |
 | | ink | `oklch(0.99 0.012 350)` |
 | | accent | `oklch(0.70 0.165 250)` azul eléctrico |
@@ -51,7 +51,7 @@ Escala fluida con `clamp()`, razón 1.3 entre pasos. Techo de display 6rem. `tex
 
 El movimiento es el argumento del proyecto, no la decoración.
 
-- **Aguja sobre el vinilo.** El botón de apertura baja una púa sobre un disco que gira. Ese gesto es el que el navegador exige para reproducir audio: la restricción técnica convertida en momento.
+- **Agua rosa.** La portada presenta a Juli como si sacara su disco homónimo, igual que Harry en 2017. El fondo es una simulación de ondas en tiempo real (dos buffers de altura, en baja resolución y escalada por el navegador) que responde al dedo y, con la música sonando, a los graves. El botón "Meterse al agua" es el gesto que el navegador exige para reproducir audio, y tira un chapuzón grande: la restricción técnica convertida en momento. Los topes de brillo y valle del agua están calculados para que el texto encima pase AA en el valle más oscuro.
 - **Reactivo al audio.** Un `AnalyserNode` de la Web Audio API lee el MP3 en vivo y alimenta el pulso de la bola de disco y el latido de los reflectores. Si no hay archivo de audio, un oscilador de respaldo genera la misma energía para que nada se vea muerto.
 - **Transición entre eras.** Fundido cruzado de 620ms con `ease-out-expo`, con el color de fondo del documento interpolando en paralelo. El contenido entrante entra escalonado.
 - **Odómetro.** La cuenta regresiva rueda por columnas de dígitos, no parpadea.
@@ -70,7 +70,7 @@ El movimiento es el argumento del proyecto, no la decoración.
 ## Components
 
 - `era` — sección a pantalla completa que aplica su paleta al documento al activarse.
-- `vinilo` — disco giratorio + púa, dispara el audio.
+- `agua` — canvas de ondas en tiempo real (`js/water.js`); el botón de la portada dispara el audio.
 - `odometro` — cuenta regresiva por columnas.
 - `lente` — composición circular con texto curvo en `textPath`, para Fine Line.
 - `reflector` — máscara de gradiente radial que sigue al puntero.

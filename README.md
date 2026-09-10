@@ -33,7 +33,7 @@ Mientras falten datos, la invitación funciona igual y muestra placeholders visi
 
 Dejá el MP3 en `assets/audio/` y poné su nombre en `config.js`.
 
-El navegador **no permite** que el audio arranque solo: necesita un gesto de la persona. Ese gesto es el botón "Bajar la púa" de la primera pantalla. Si el archivo no existe o falla, el recorrido sigue funcionando en silencio y los efectos visuales pasan a un latido sintético.
+El navegador **no permite** que el audio arranque solo: necesita un gesto de la persona. Ese gesto es el botón "Meterse al agua" de la primera pantalla (también sirven la flecha derecha y los puntos de abajo). Si el archivo no existe o falla, el recorrido sigue funcionando en silencio y los efectos visuales pasan a un latido sintético.
 
 Exportá el tema en 128 kbps mono o 160 kbps estéreo. Tres minutos así pesan unos 3 MB, que es lo máximo razonable para que cargue rápido con datos móviles.
 
@@ -73,6 +73,8 @@ npm run deploy       # deploy definitivo (vercel --prod)
 
 La URL de producción es la que mandás por WhatsApp.
 
+**Importante:** `assets/` está en el `.gitignore`, así que la música y las fotos **no están en GitHub**. Si conectás Vercel al repositorio para que deploye solo en cada push, el sitio publicado sale sin música ni fotos. Deployá con `npm run deploy` desde esta carpeta: sube los archivos locales, `assets/` incluido.
+
 ### La imagen de preview
 
 WhatsApp muestra una tarjeta con imagen cuando se comparte un link. Para que aparezca faltan dos cosas:
@@ -97,6 +99,7 @@ css/eras.css        una paleta y un mundo visual por era
 js/config.js        los datos de la fiesta
 js/app.js           navegación, cuenta regresiva, galería, luces
 js/audio.js         reproducción, silencio y análisis de frecuencias
+js/water.js         la simulación de agua de la portada
 scripts/fotos.mjs   optimiza las fotos y arma la lista
 scripts/contraste.mjs  verifica el contraste de las paletas (WCAG AA)
 ```
@@ -107,7 +110,7 @@ Las seis pantallas están todas en el DOM; una sola tiene la clase `is-active`. 
 
 ### Detalles que importan
 
-- **Movimiento reducido:** con `prefers-reduced-motion` activado se apagan la lente, el reflector, el pulso de la bola de disco y la animación del odómetro. No se pierde información.
+- **Movimiento reducido:** con `prefers-reduced-motion` activado el agua queda quieta y se apagan la lente, el reflector, el pulso de la bola de disco y la animación del odómetro. No se pierde información.
 - **Navegación:** botón, deslizamiento, flechas izquierda y derecha, y los puntos de abajo.
 - **Fecha pasada:** la cuenta regresiva no muestra números negativos; cambia el mensaje.
 - **Sin JavaScript:** se ve la primera pantalla completa.

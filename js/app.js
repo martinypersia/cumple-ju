@@ -1,5 +1,6 @@
 import { CONFIG } from "./config.js";
 import { audio } from "./audio.js";
+import { crearAgua } from "./water.js";
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -25,10 +26,17 @@ function fmt(opts) {
   catch { return new Intl.DateTimeFormat("es-AR", opts).format(fecha); }
 }
 
+// "sábado 3 de octubre", armado a mano: Intl mete una coma después del día
+// de la semana, y en una frase ("en vivo el sábado, 3 de…") queda raro.
+function diaTexto() {
+  return `${fmt({ weekday: "long" })} ${fmt({ day: "numeric" })} de ${fmt({ month: "long" })}`;
+}
+
 const valores = {
   nombre: CONFIG.nombre || "[NOMBRE]",
   edad: CONFIG.edad,
-  diaLargo: fechaOk ? cap(fmt({ weekday: "long", day: "numeric", month: "long" })) : "[falta la fecha]",
+  diaLargo: fechaOk ? cap(diaTexto()) : "[falta la fecha]",
+  diaCorto: fechaOk ? diaTexto() : "[falta la fecha]",
   hora: fechaOk ? fmt({ hour: "2-digit", minute: "2-digit" }) + " h" : "—",
   horaFin: CONFIG.horaFin || "—",
   lugarNombre: CONFIG.lugar?.nombre || "[NOMBRE DEL LUGAR]",
@@ -240,6 +248,9 @@ function ir(i) {
   eras[destino].scrollTop = 0;
   current = destino;
 
+  // el agua sólo se simula mientras se ve: ahorra batería en el celular
+  if (destino === 0) agua.activar(); else agua.desactivar();
+
   // la barra del navegador acompaña el cambio de era, ya terminada la transición
   clearTimeout(ir.pintarBarra);
   ir.pintarBarra = setTimeout(() => {
@@ -253,14 +264,20 @@ $("#replay").addEventListener("click", () => ir(0));
 
 // Sólo izquierda/derecha: arriba y abajo tienen que seguir sirviendo para
 // desplazar una pantalla que no entra completa.
+// Desde la portada, avanzar equivale a tocar el botón: si no, la música
+// nunca arrancaría.
 document.addEventListener("keydown", (e) => {
-  if (["ArrowRight", "PageDown"].includes(e.key)) { e.preventDefault(); ir(current + 1); }
-  if (["ArrowLeft", "PageUp"].includes(e.key))    { e.preventDefault(); ir(current - 1); }
+  if (["ArrowRight", "PageDown"].includes(e.key)) {
+    e.preventDefault();
+    if (current === 0) empezar(); else ir(current + 1);
+  }
+  if (["ArrowLeft", "PageUp"].includes(e.key)) { e.preventDefault(); ir(current - 1); }
 });
 
 let x0 = null, y0 = null;
 document.addEventListener("touchstart", (e) => {
-  if (e.target.closest(".gallery")) { x0 = null; return; }
+  // en la portada arrastrar el dedo es jugar con el agua, no deslizar
+  if (current === 0 || e.target.closest(".gallery")) { x0 = null; return; }
   x0 = e.changedTouches[0].clientX;
   y0 = e.changedTouches[0].clientY;
 }, { passive: true });
@@ -274,20 +291,53 @@ document.addEventListener("touchend", (e) => {
 }, { passive: true });
 
 /* ============================================================
-   LA PÚA
+   PORTADA: METERSE AL AGUA
    ============================================================ */
 
 const mute = $("#mute");
+const start = $("#start");
 
-$("#start").addEventListener("click", async () => {
-  $("#tonearm").classList.add("is-down");
-  const sonando = await audio.start();
-  if (sonando) {
-    mute.hidden = false;
-    mute.setAttribute("aria-pressed", String(audio.muted));
-  }
-  setTimeout(() => ir(1), reduced ? 120 : 900);
+const agua = crearAgua($("#water"), $("#era-0"), {
+  reducido: reduced,
+  // con la música sonando, los graves tiran gotas si se vuelve a la portada
+  energia: () => (audio.available && !audio.muted ? audio.energy() : 0),
 });
+agua.activar();
+
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) agua.desactivar();
+  else if (current === 0) agua.activar();
+});
+
+function mostrarSilencio() {
+  mute.hidden = false;
+  mute.setAttribute("aria-pressed", String(audio.muted));
+}
+
+/** Arranca la música y entra a la invitación. Siempre desde un gesto. */
+let empezando = false;
+function empezar() {
+  if (empezando) return;
+  empezando = true;
+
+  // audio.start() tiene que llamarse ya, sin nada asíncrono antes,
+  // para que el navegador lo reconozca como parte del gesto
+  const sonando = audio.start();
+
+  const r = start.getBoundingClientRect();
+  agua.salpicar(r.left + r.width / 2, r.top + r.height / 2);
+
+  sonando.then((ok) => { if (ok) mostrarSilencio(); });
+  setTimeout(() => { ir(1); empezando = false; }, reduced ? 120 : 900);
+}
+
+start.addEventListener("click", empezar);
+
+// Saltar desde la portada con los puntos también es un gesto: aprovechamos
+// para arrancar la música, que si no se perdería.
+puntos.forEach((p, i) => p.addEventListener("click", () => {
+  if (i > 0 && !audio.available) audio.start().then((ok) => { if (ok) mostrarSilencio(); });
+}));
 
 mute.addEventListener("click", () => {
   const m = audio.toggleMute();
