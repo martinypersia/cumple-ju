@@ -18,7 +18,7 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Chivo+Mono:wght@300..700&family=Figtree:wght@300..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Chivo+Mono:wght@300..700&family=Figtree:wght@300..900&family=Fraunces:ital,opsz,wght,SOFT,WONK@1,9..144,600..900,0..100,0..1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/base.css?v=2">
 <link rel="stylesheet" href="css/eras.css?v=2">
 </head>
@@ -69,8 +69,9 @@
   <!-- 1 - FINE LINE (2019) - QUIEN -->
   <section class="era era--fuchsia" id="era-1" data-era="1" hidden aria-label="Quién cumple">
     <div class="era__inner era__inner--center">
-      <h2 class="display display--lg" data-reveal>¡Elegiste la opción correcta!</h2>
-
+      <h2 class="display display--fine" data-reveal>¡Elegiste la opción correcta!</h2>
+      <p class="lede" data-joke="quien" data-reveal>Si recibiste esta invitación es porque quiero compartir un dia tan especial con vos</p>
+<br>
       <div class="lens" data-reveal>
         <svg class="lens__ring" viewBox="0 0 300 300" aria-hidden="true">
           <defs><path id="lensCircle" d="M150,150 m-132,0 a132,132 0 1,1 264,0 a132,132 0 1,1 -264,0"/></defs>
@@ -88,9 +89,7 @@
         </div>
       </div>
 
-      <h2 class="display display--name" data-bind="nombre" data-reveal>[NOMBRE]</h2>
       <p class="age" id="age" data-reveal hidden><span class="age__num" data-bind="edad"></span><span class="age__word">años</span></p>
-      <p class="lede" data-joke="quien" data-reveal>Si recibiste esta invitación es porque quiero compartir un dia tan especial con vos</p>
 
       <button class="btn" data-next data-reveal>¿Cuándo es?</button>
     </div>

@@ -269,6 +269,7 @@ function ir(i) {
   // el agua y la bola sólo se animan mientras se ven: ahorra batería en el celular
   if (destino === 0) { agua.activar(); bola.activar(); }
   else { agua.desactivar(); bola.desactivar(); }
+  reproducirVideos();
 
   // la barra del navegador acompaña el cambio de era, ya terminada la transición
   clearTimeout(ir.pintarBarra);
@@ -330,13 +331,29 @@ const bola = crearBola($("#bola"), $("#reflejos"), {
 });
 bola.activar();
 
-// los videos que hacen de GIF no llevan autoplay en el HTML: con
-// movimiento reducido quedan en el cuadro fijo del poster
-if (!reduced) $$("video[data-autoplay]").forEach((v) => v.play().catch(() => {}));
+// Los videos que hacen de GIF no llevan autoplay en el HTML: con
+// movimiento reducido quedan en el cuadro fijo del poster.
+// En el iPhone, Safari pausa los videos que no se ven y, con ahorro de
+// batería, rechaza el play hasta que haya un toque: por eso se vuelve a
+// intentar al cambiar de pantalla, al volver a la pestaña y en cada toque.
+function reproducirVideos() {
+  if (reduced) return;
+  $$("video[data-autoplay]", eras[current]).forEach((v) => {
+    v.muted = true; // Safari mira la propiedad, no sólo el atributo
+    if (v.paused) v.play().catch(() => {});
+  });
+}
+reproducirVideos();
+["pointerup", "touchend"].forEach((tipo) =>
+  document.addEventListener(tipo, reproducirVideos, { passive: true })
+);
 
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) { agua.desactivar(); bola.desactivar(); }
-  else if (current === 0) { agua.activar(); bola.activar(); }
+  else {
+    if (current === 0) { agua.activar(); bola.activar(); }
+    reproducirVideos();
+  }
 });
 
 function mostrarSilencio() {

@@ -47,7 +47,7 @@ export const CONFIG = {
   // --- Chistes internos ---
   // Tres huecos. Dejalos vacíos y se usa el texto de fábrica.
   chistes: {
-    quien: "",   // pantalla 2, debajo del nombre
+    quien: "",   // pantalla 2, arriba del círculo
     cuando: "",  // pantalla 3, debajo de la fecha
     donde: "",   // pantalla 4, debajo de la dirección
     galeria: "", // pantalla 5, título de la galería

@@ -11,6 +11,16 @@ html { -webkit-text-size-adjust: 100%; }
 img, svg, canvas { display: block; max-width: 100%; }
 img { height: auto; }
 
+/* Los videos hacen de GIF: no se tocan y no muestran controles. En el
+   iPhone con ahorro de batería Safari no los deja arrancar solos y les
+   pone encima un botón de play que parece un error; sin él queda el poster. */
+video[data-autoplay] { pointer-events: none; }
+video[data-autoplay]::-webkit-media-controls,
+video[data-autoplay]::-webkit-media-controls-start-playback-button {
+  display: none !important;
+  -webkit-appearance: none;
+}
+
 button, a { font: inherit; color: inherit; }
 button { background: none; border: 0; cursor: pointer; }
 a { text-decoration: none; }
@@ -294,6 +304,7 @@ body {
   padding: 0.5rem 0.75rem;
   border-radius: 999px;
   background: color-mix(in oklch, var(--bg) 55%, transparent);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   transition: opacity 400ms var(--ease-quart);
 }
@@ -326,6 +337,7 @@ body {
   color: var(--ink);
   background: color-mix(in oklch, var(--bg) 45%, transparent);
   border: 1px solid var(--line);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   transition: transform 320ms var(--ease-expo);
 }

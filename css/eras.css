@@ -203,6 +203,7 @@ body[data-era="5"]::before { opacity: 1; }
 .btn--nope {
   z-index: 3;
   background: color-mix(in oklch, var(--bg) 35%, transparent);
+  -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
   translate: var(--nx, 0px) var(--ny, 0px);
   rotate: var(--nr, 0deg);
@@ -251,9 +252,39 @@ body[data-era="5"]::before { opacity: 1; }
 .era--fuchsia {
   background: var(--bg) url("../assets/fotos/web/torta.webp?v=2") 37% 50% / cover no-repeat;
 }
+/* título en serif setentosa, blanda e itálica, a tono con lo retro de
+   Fine Line; sombra en escalón con el azul y el amarillo de la era, y un
+   halo oscuro para que se lea sobre la foto */
+.display--fine {
+  font-family: "Fraunces", Georgia, serif;
+  font-style: italic;
+  font-weight: 900;
+  font-size: clamp(2.25rem, 9.5vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
+  color: #fff;
+  rotate: -3deg;
+  text-shadow:
+    0.035em 0.035em 0 var(--accent),
+    0.07em 0.07em 0 var(--accent-2),
+    0 0 1.25rem rgb(0 0 0 / 0.55);
+}
+
+/* sobre la foto el color de la era no se lee: blanco con sombra negra */
+.era--fuchsia .lede {
+  color: #fff;
+  font-weight: 600;
+  text-shadow:
+    0 1px 2px rgb(0 0 0 / 1),
+    0 0 4px rgb(0 0 0 / 0.95),
+    0 0 1rem rgb(0 0 0 / 0.9),
+    0 0 1.75rem rgb(0 0 0 / 0.6);
+}
 /* el botón es transparente y abajo cae sobre el guante negro */
 .era--fuchsia .btn {
   background: color-mix(in oklch, white 72%, transparent);
+  -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
 }
 
@@ -533,6 +564,7 @@ body[data-era="5"]::before { opacity: 1; }
   border-radius: 999px;
   color: var(--ink);
   background: oklch(0 0 0 / 0.55);
+  -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
 }
 
