@@ -27,7 +27,7 @@ export const CONFIG = {
 
   // --- El link del grupo ---
   // https://chat.whatsapp.com/XXXXXXXXXXXX
-  whatsappGrupo: "",
+  whatsappGrupo: "https://chat.whatsapp.com/GpKfEPufgkQB6coBQ4BBtR",
 
   // --- Música ---
   // Dejá tu MP3 en assets/audio/ y poné el nombre acá.

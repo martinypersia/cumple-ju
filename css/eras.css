@@ -434,6 +434,36 @@ body[data-era="5"]::before { opacity: 1; }
   50%      { transform: translateY(-0.9rem) rotate(1.5deg); }
 }
 
+/* fondo: casitas dadas vuelta que suben flotando detrás del contenido.
+   Arrancan con demora negativa para que al entrar ya haya casitas en
+   pantalla; sólo se mueven con transform, que el celular pinta sin esfuerzo */
+.casitas {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.casita {
+  position: absolute;
+  top: 100%;
+  left: var(--x);
+  width: var(--s);
+  height: auto;
+  aspect-ratio: 200 / 170;
+  opacity: var(--o);
+  will-change: transform;
+  animation: subir var(--d) linear var(--t) infinite;
+}
+/* mientras la vista no se ve, quietas: ahorra batería */
+.era:not(.is-active) .casita { animation-play-state: paused; }
+
+@keyframes subir {
+  0%   { transform: translate3d(0, 0, 0) rotate(calc(var(--r) * -1)); }
+  50%  { transform: translate3d(var(--dx), calc((100dvh + 130%) * -0.5), 0) rotate(var(--r)); }
+  100% { transform: translate3d(0, calc(-100dvh - 130%), 0) rotate(calc(var(--r) * -1)); }
+}
+
 /* botón mostaza: contra el crema casi no se distingue, así que lleva borde
    marrón y un escalón terracota; al tocarlo se hunde sobre su sombra */
 .era--sky .btn {
@@ -691,4 +721,5 @@ body[data-era="5"]::before { opacity: 1; }
   .lens__ring, .ball__sphere, .house, .map__pulse { animation: none !important; }
   .ball__glow { transform: none; opacity: 0.6; }
   .colgante { animation: none; }
+  .casitas { display: none; }
 }

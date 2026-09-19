@@ -1,4 +1,4 @@
-import { CONFIG } from "./config.js?v=2";
+import { CONFIG } from "./config.js?v=3";
 import { audio } from "./audio.js?v=2";
 import { crearAgua } from "./water.js?v=2";
 import { crearBola } from "./bola.js?v=2";
