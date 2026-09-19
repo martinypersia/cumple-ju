@@ -249,7 +249,7 @@ body[data-era="5"]::before { opacity: 1; }
 /* fondo: el cuarto pastel con la porción de torta. En el celular se ve
    una franja vertical; el 37% la centra en la torta. */
 .era--fuchsia {
-  background: var(--bg) url("../assets/fotos/web/torta.webp") 37% 50% / cover no-repeat;
+  background: var(--bg) url("../assets/fotos/web/torta.webp?v=2") 37% 50% / cover no-repeat;
 }
 /* el botón es transparente y abajo cae sobre el guante negro */
 .era--fuchsia .btn {

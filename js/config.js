@@ -32,7 +32,7 @@ export const CONFIG = {
   // --- Música ---
   // Dejá tu MP3 en assets/audio/ y poné el nombre acá.
   // Si el archivo no existe, la invitación funciona igual, en silencio.
-  audio: "assets/audio/dancenomore.mp3",
+  audio: "assets/audio/dancenomore.mp3?v=2",
 
   // --- Fotos ---
   // Dejá las fotos en assets/fotos/ y listalas acá.
