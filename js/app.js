@@ -1,9 +1,9 @@
-import { CONFIG } from "./config.js";
-import { audio } from "./audio.js";
-import { crearAgua } from "./water.js";
-import { crearBola } from "./bola.js";
-import { sonarError } from "./sfx.js";
-import { lanzarConfeti } from "./confeti.js";
+import { CONFIG } from "./config.js?v=2";
+import { audio } from "./audio.js?v=2";
+import { crearAgua } from "./water.js?v=2";
+import { crearBola } from "./bola.js?v=2";
+import { sonarError } from "./sfx.js?v=2";
+import { lanzarConfeti } from "./confeti.js?v=2";
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
