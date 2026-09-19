@@ -26,17 +26,24 @@ body[data-era="1"] {
   --wdth: 100;
 }
 
-/* ---------- 2 · Harry's House (2022) · celeste ---------- */
+/* ---------- 2 · Harry's House (2022) · la portada del disco ----------
+   Contrastes sobre el crema: marrón 16:1, marrón suave 7:1, denim 5.1:1.
+   El mostaza no llega a 3:1 contra el crema: nunca va como texto sobre el
+   fondo, sólo de relleno con el marrón encima (7.7:1). */
 body[data-era="2"] {
-  --bg:        oklch(0.80 0.105 230);
-  --bg-2:      oklch(0.88 0.070 225);
-  --ink:       oklch(0.26 0.065 250);
-  --ink-dim:   oklch(0.40 0.075 250);
-  --accent:    oklch(0.510 0.150 72);
-  --accent-2:  oklch(0.68 0.170 42);
-  --on-accent: oklch(0.980 0.010 80);
+  --bg:        #F3ECE0;   /* crema cálido */
+  --bg-2:      #D9B48F;   /* tarjetas */
+  --ink:       #2B1E1A;   /* marrón oscuro */
+  --ink-dim:   #5E4A3F;   /* marrón suave: también se lee sobre la tarjeta */
+  --accent:    #E5A84B;   /* mostaza */
+  --accent-2:  #A35C37;   /* terracota */
+  --on-accent: #2B1E1A;
+  --denim:     #4B6584;
+  --line:      color-mix(in oklch, var(--denim) 45%, transparent);
   --wdth: 92;
 }
+/* el foco por defecto es mostaza y sobre el crema no se ve */
+body[data-era="2"] :focus-visible { outline-color: var(--denim); }
 
 /* ---------- 3 · Harry's House · patio · ámbar ---------- */
 body[data-era="3"] {
@@ -415,8 +422,9 @@ body[data-era="5"]::before { opacity: 1; }
   overflow: visible;
   filter: drop-shadow(0 1.25rem 1.5rem color-mix(in oklch, var(--ink) 22%, transparent));
 }
+/* techo terracota, paredes denim, ventanas mostaza, como en la tapa */
 .house__roof { fill: var(--accent-2); }
-.house__body { fill: var(--ink); }
+.house__body { fill: var(--denim); }
 .house__door { fill: var(--bg); }
 .house__knob { fill: var(--ink); }
 .house__win  { fill: var(--accent); }
@@ -426,13 +434,31 @@ body[data-era="5"]::before { opacity: 1; }
   50%      { transform: translateY(-0.9rem) rotate(1.5deg); }
 }
 
+/* botón mostaza: contra el crema casi no se distingue, así que lleva borde
+   marrón y un escalón terracota; al tocarlo se hunde sobre su sombra */
+.era--sky .btn {
+  padding: 1rem 2rem;
+  font-size: var(--fs-body);
+  font-weight: 700;
+  color: var(--on-accent);
+  background: var(--accent);
+  border: 2px solid var(--ink);
+  box-shadow: 0.25rem 0.25rem 0 var(--accent-2);
+  transition: transform 160ms var(--ease-expo), box-shadow 160ms var(--ease-expo), filter 320ms;
+}
+.era--sky .btn:hover { background: var(--accent); border-color: var(--ink); filter: brightness(1.05); }
+.era--sky .btn:active {
+  transform: translate(0.2rem, 0.2rem);
+  box-shadow: 0.05rem 0.05rem 0 var(--accent-2);
+}
+
 .ticket {
   position: relative;
   width: 100%;
   padding: var(--s3) var(--s4);
   border: 1.5px solid var(--line);
   border-radius: 14px;
-  background: color-mix(in oklch, var(--ink) 6%, transparent);
+  background: color-mix(in oklch, var(--bg-2) 35%, transparent);
 }
 .ticket__row {
   display: flex;
