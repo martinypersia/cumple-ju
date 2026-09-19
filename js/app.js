@@ -1,6 +1,9 @@
 import { CONFIG } from "./config.js";
 import { audio } from "./audio.js";
 import { crearAgua } from "./water.js";
+import { crearBola } from "./bola.js";
+import { sonarError } from "./sfx.js";
+import { lanzarConfeti } from "./confeti.js";
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -64,6 +67,21 @@ if (CONFIG.fotoPrincipal?.src) {
   img.decoding = "async";
   img.addEventListener("load", () => { $("#lensMedia").replaceChildren(img); });
 }
+
+// El texto del anillo tiene que cerrar la vuelta justa, sin hueco ni
+// sobrante. Su largo depende de la fuente, así que se mide ya cargada y
+// la diferencia se reparte en el espaciado entre letras.
+function ajustarAnillo() {
+  const tp = $(".lens__text textPath");
+  if (!tp) return;
+  tp.style.letterSpacing = "";
+  const vuelta = $("#lensCircle").getTotalLength();
+  const texto = tp.getComputedTextLength();
+  if (!texto) return;
+  const base = parseFloat(getComputedStyle(tp).letterSpacing) || 0;
+  tp.style.letterSpacing = `${base + (vuelta - texto) / tp.textContent.length}px`;
+}
+document.fonts.ready.then(ajustarAnillo);
 
 // Mapa.
 const maps = $("#maps");
@@ -248,8 +266,9 @@ function ir(i) {
   eras[destino].scrollTop = 0;
   current = destino;
 
-  // el agua sólo se simula mientras se ve: ahorra batería en el celular
-  if (destino === 0) agua.activar(); else agua.desactivar();
+  // el agua y la bola sólo se animan mientras se ven: ahorra batería en el celular
+  if (destino === 0) { agua.activar(); bola.activar(); }
+  else { agua.desactivar(); bola.desactivar(); }
 
   // la barra del navegador acompaña el cambio de era, ya terminada la transición
   clearTimeout(ir.pintarBarra);
@@ -304,9 +323,20 @@ const agua = crearAgua($("#water"), $("#era-0"), {
 });
 agua.activar();
 
+const bola = crearBola($("#bola"), $("#reflejos"), {
+  reducido: reduced,
+  // con la música, los graves hacen brillar más los espejitos y los reflejos
+  energia: () => (audio.available && !audio.muted ? audio.energy() : 0),
+});
+bola.activar();
+
+// los videos que hacen de GIF no llevan autoplay en el HTML: con
+// movimiento reducido quedan en el cuadro fijo del poster
+if (!reduced) $$("video[data-autoplay]").forEach((v) => v.play().catch(() => {}));
+
 document.addEventListener("visibilitychange", () => {
-  if (document.hidden) agua.desactivar();
-  else if (current === 0) agua.activar();
+  if (document.hidden) { agua.desactivar(); bola.desactivar(); }
+  else if (current === 0) { agua.activar(); bola.activar(); }
 });
 
 function mostrarSilencio() {
@@ -326,12 +356,81 @@ function empezar() {
 
   const r = start.getBoundingClientRect();
   agua.salpicar(r.left + r.width / 2, r.top + r.height / 2);
+  if (!reduced) lanzarConfeti(r.left + r.width / 2, r.top + r.height / 2);
 
   sonando.then((ok) => { if (ok) mostrarSilencio(); });
   setTimeout(() => { ir(1); empezando = false; }, reduced ? 120 : 900);
 }
 
 start.addEventListener("click", empezar);
+
+/* ------------------------------------------------------------
+   "NO PUEDO IR": no se deja tocar
+   Se corre apenas el dedo lo apoya (o el mouse se le acerca) a un lugar
+   al azar de la pantalla, lejos de donde estaba. No hace nada más.
+   ------------------------------------------------------------ */
+
+const nope = $("#nope");
+let ultimoEscape = 0;
+
+function escapar(px, py) {
+  const ahora = performance.now();
+  if (ahora - ultimoEscape < 120) return; // pointerenter + pointerdown juntos
+  ultimoEscape = ahora;
+
+  const nx = parseFloat(nope.style.getPropertyValue("--nx")) || 0;
+  const ny = parseFloat(nope.style.getPropertyValue("--ny")) || 0;
+  const r = nope.getBoundingClientRect();
+  // posición sin el desplazamiento actual: desde ahí se mide el nuevo
+  const baseX = r.left - nx;
+  const baseY = r.top - ny;
+
+  const margen = 16;
+  const arriba = 72;   // deja libre el botón de silencio
+  const abajo = 96;    // y los puntos de navegación
+  const maxX = Math.max(margen, window.innerWidth - r.width - margen);
+  const maxY = Math.max(arriba, window.innerHeight - r.height - abajo);
+
+  // origen del peligro: el dedo, o el centro del botón si vino por teclado
+  const ox = px ?? r.left + r.width / 2;
+  const oy = py ?? r.top + r.height / 2;
+
+  // de varios lugares al azar, el más lejano al dedo
+  let mejor = null, mejorDist = -1;
+  for (let k = 0; k < 14; k++) {
+    const x = margen + Math.random() * (maxX - margen);
+    const y = arriba + Math.random() * (maxY - arriba);
+    const d = Math.hypot(x + r.width / 2 - ox, y + r.height / 2 - oy);
+    if (d > mejorDist) { mejor = [x, y]; mejorDist = d; }
+  }
+
+  nope.style.setProperty("--nx", `${(mejor[0] - baseX).toFixed(1)}px`);
+  nope.style.setProperty("--ny", `${(mejor[1] - baseY).toFixed(1)}px`);
+  nope.style.setProperty("--nr", `${(Math.random() * 12 - 6).toFixed(1)}deg`);
+  sonarError();
+}
+
+nope.addEventListener("pointerdown", (e) => {
+  e.preventDefault(); // sin foco, sin selección, sin mouse emulado
+  escapar(e.clientX, e.clientY);
+});
+nope.addEventListener("pointerenter", (e) => {
+  if (e.pointerType === "mouse") escapar(e.clientX, e.clientY);
+});
+// con teclado (Enter/Espacio) también se escapa; un click de verdad no llega
+nope.addEventListener("click", (e) => {
+  e.preventDefault();
+  if (e.detail === 0) escapar();
+});
+
+// si cambia el ancho (girar el celular), vuelve a su lugar para no quedar
+// afuera; el alto cambia solo con la barra del navegador y ahí no importa
+let anchoNope = window.innerWidth;
+window.addEventListener("resize", () => {
+  if (window.innerWidth === anchoNope) return;
+  anchoNope = window.innerWidth;
+  ["--nx", "--ny", "--nr"].forEach((p) => nope.style.removeProperty(p));
+});
 
 // Saltar desde la portada con los puntos también es un gesto: aprovechamos
 // para arrancar la música, que si no se perdería.

@@ -32,42 +32,57 @@
   <!-- 0 - HARRY STYLES (2017) - PORTADA: "JULI STYLES", EL DISCO DEBUT -->
   <section class="era era--water is-active" id="era-0" data-era="0" aria-label="Portada">
     <canvas class="water" id="water" aria-hidden="true"></canvas>
+    <canvas class="reflejos" id="reflejos" aria-hidden="true"></canvas>
+    <div class="colgante" aria-hidden="true">
+      <span class="colgante__cable"></span>
+      <canvas class="colgante__bola" id="bola"></canvas>
+    </div>
     <div class="era__inner era__inner--cover">
-      <p class="sticker" data-reveal>edición limitada<br>una sola fecha</p>
-
-      <p class="overline" data-reveal>El disco debut</p>
+      <p class="overline" data-reveal>Mi cumpleaños</p>
       <h1 class="display display--cover" data-reveal>
         <span data-bind="nombre">Juli</span>
         <span>Styles</span>
       </h1>
       <p class="cover__date" data-reveal>En vivo el <span data-bind="diaCorto">sábado 3 de octubre</span></p>
+<br>
+      <figure class="cuadro" data-reveal>
+        <p class="sticker">No regalo<br>=<br>No entra</p>
+        <video class="cuadro__media" id="cuadro" src="assets/gifs/carrie.mp4" poster="assets/gifs/carrie.jpg"
+               muted loop playsinline preload="auto" width="400" height="222" data-autoplay
+               aria-label="Carrie Bradshaw bailando en el vestidor"></video>
+      </figure>
 
-      <p class="lede" data-reveal>Subí el volumen y tocá el agua.</p>
+      <p class="lede" data-reveal>Estás invitad@ ¿Venís?</p>
 
-      <button class="btn btn--hero" id="start" data-reveal>
-        <span class="btn__icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3v18l14-9z" fill="currentColor"/></svg>
-        </span>
-        <span class="btn__label">Meterse al agua</span>
-      </button>
-      <p class="fineprint" data-reveal>Se escucha mejor con sonido. Lo podés silenciar cuando quieras.</p>
+      <div class="cover__actions" data-reveal>
+        <button class="btn btn--hero" id="start">
+          <span class="btn__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3v18l14-9z" fill="currentColor"/></svg>
+          </span>
+          <span class="btn__label">Contá conmigo</span>
+        </button>
+        <button class="btn btn--nope" id="nope" type="button">No puedo ir</button>
+      </div>
     </div>
   </section>
 
   <!-- 1 - FINE LINE (2019) - QUIEN -->
   <section class="era era--fuchsia" id="era-1" data-era="1" hidden aria-label="Quién cumple">
     <div class="era__inner era__inner--center">
+      <h2 class="display display--lg" data-reveal>¡Elegiste la opción correcta!</h2>
+
       <div class="lens" data-reveal>
         <svg class="lens__ring" viewBox="0 0 300 300" aria-hidden="true">
           <defs><path id="lensCircle" d="M150,150 m-132,0 a132,132 0 1,1 264,0 a132,132 0 1,1 -264,0"/></defs>
-          <text class="lens__text"><textPath href="#lensCircle" startOffset="0">cumple años · cumple años · cumple años · cumple años ·</textPath></text>
+          <!-- el espaciado lo ajusta app.js para que la vuelta cierre justa;
+               el &#160; final es el espacio antes del primer "MI" -->
+          <text class="lens__text"><textPath href="#lensCircle" startOffset="0">MI CUMPLE · MI CUMPLE · MI CUMPLE · MI CUMPLE · MI CUMPLE · MI CUMPLE ·&#160;</textPath></text>
         </svg>
         <div class="lens__glass">
           <div class="lens__media" id="lensMedia">
-            <div class="ph ph--round">
-              <span class="ph__label">foto principal</span>
-              <span class="ph__hint">CONFIG.fotoPrincipal</span>
-            </div>
+            <video src="assets/gifs/harry.mp4" poster="assets/gifs/harry.jpg"
+                   muted loop playsinline preload="auto" width="500" height="280" data-autoplay
+                   aria-label="Harry Styles bailando en el escenario"></video>
           </div>
           <div class="lens__flare" aria-hidden="true"></div>
         </div>
@@ -75,7 +90,7 @@
 
       <h2 class="display display--name" data-bind="nombre" data-reveal>[NOMBRE]</h2>
       <p class="age" id="age" data-reveal hidden><span class="age__num" data-bind="edad"></span><span class="age__word">años</span></p>
-      <p class="lede" data-joke="quien" data-reveal>Cumple años y decidió que eso es un problema de todos. Bien ahí.</p>
+      <p class="lede" data-joke="quien" data-reveal>Si recibiste esta invitación es porque quiero compartir un dia tan especial con vos</p>
 
       <button class="btn" data-next data-reveal>¿Cuándo es?</button>
     </div>
@@ -140,8 +155,8 @@
   <section class="era era--stage" id="era-4" data-era="4" hidden aria-label="Galería de fotos">
     <div class="spotlight" id="spotlight" aria-hidden="true"></div>
     <div class="era__inner era__inner--wide">
-      <p class="overline" data-reveal>Antecedentes</p>
-      <h2 class="display display--lg" data-joke="galeria" data-reveal>Pruebas de que<br>sabemos festejar</h2>
+      <p class="overline" data-reveal>Los anfitriones</p>
+      <h2 class="display display--lg" data-joke="galeria" data-reveal>Juli + Lucas</h2> 
 
       <div class="gallery" id="gallery" data-reveal></div>
 

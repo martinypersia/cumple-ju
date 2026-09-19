@@ -111,7 +111,8 @@ body[data-era="5"]::before { opacity: 1; }
 .display--cover {
   display: flex;
   flex-direction: column;
-  font-size: clamp(3.75rem, 23vw, 6rem);
+  /* 19vw y no 23vw: la bola cuelga a la derecha y no tiene que pisar "STYLES" */
+  font-size: clamp(3.5rem, 19vw, 6rem);
   font-weight: 800;
   line-height: 0.84;
   letter-spacing: -0.02em;
@@ -125,10 +126,103 @@ body[data-era="5"]::before { opacity: 1; }
   font-weight: 600;
 }
 
+/* Bola de espejos colgada del techo (la dibuja js/bola.js). Fija, como el
+   agua: al estar dentro de la portada, se va con ella al cambiar de era. */
+.colgante {
+  --bola: clamp(8.5rem, 40vw, 13rem);
+  --cable: clamp(1.5rem, 5dvh, 4rem);
+  position: fixed;
+  top: 0;
+  /* pegada al borde derecho del contenido y un poco afuera */
+  right: max(0.25rem, calc(50vw - min(50vw - var(--s4), 17rem) - 2.5rem));
+  z-index: 3;
+  width: var(--bola);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  transform-origin: 50% 0;
+  animation: hamaca 6s ease-in-out infinite alternate;
+}
+.colgante__cable {
+  width: 2px;
+  height: var(--cable);
+  background: linear-gradient(90deg, oklch(0.40 0.06 355), oklch(0.75 0.03 350), oklch(0.40 0.06 355));
+}
+.colgante__bola {
+  width: var(--bola);
+  height: var(--bola);
+  filter: drop-shadow(0 1.25rem 1.5rem oklch(0.30 0.10 8 / 0.35));
+}
+@keyframes hamaca {
+  from { rotate: -2.5deg; }
+  to   { rotate: 2.5deg; }
+}
+
+/* los reflejos que tira la bola: arriba del agua, debajo del texto */
+.reflejos {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+/* el cuadro con el video: un recorte pegado a mano sobre el agua */
+.cuadro {
+  position: relative;
+  width: min(100%, 20rem);
+  padding: 0.5rem;
+  background: var(--accent-2);
+  rotate: -2deg;
+  box-shadow:
+    0 0 0 2px var(--ink),
+    0.5rem 0.625rem 0 -0.125rem color-mix(in oklch, var(--ink) 80%, transparent);
+}
+.cuadro__media {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 400 / 222;
+  object-fit: cover;
+  background: var(--bg-2);
+}
+
+.cover__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s2) var(--s3);
+}
+
+/* "No puedo ir": se corre cuando lo querés tocar. Usa `translate` y
+   `rotate` sueltos para no pisar el scale de :active ni la animación
+   de entrada, que van por `transform`. */
+.btn--nope {
+  z-index: 3;
+  background: color-mix(in oklch, var(--bg) 35%, transparent);
+  backdrop-filter: blur(6px);
+  translate: var(--nx, 0px) var(--ny, 0px);
+  rotate: var(--nr, 0deg);
+  transition:
+    translate 460ms var(--ease-expo),
+    rotate 460ms var(--ease-expo),
+    background-color 320ms,
+    border-color 320ms;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* pegado en la esquina del cuadro, sobre el perchero: arriba a la derecha
+   del título ahora va la bola */
 .sticker {
   position: absolute;
-  top: -0.25rem;
-  right: 0;
+  z-index: 1;
+  top: -2rem;
+  left: -1rem;
   display: grid;
   place-content: center;
   width: 6.25rem;
@@ -142,7 +236,7 @@ body[data-era="5"]::before { opacity: 1; }
   line-height: 1.3;
   color: var(--accent);
   background: var(--accent-2);
-  rotate: 12deg;
+  rotate: -10deg;
   box-shadow: 0 0.75rem 1.5rem -0.75rem oklch(0.30 0.10 8 / 0.5);
 }
 
@@ -151,6 +245,17 @@ body[data-era="5"]::before { opacity: 1; }
 /* ============================================================
    1 · LENTE (Fine Line)
    ============================================================ */
+
+/* fondo: el cuarto pastel con la porción de torta. En el celular se ve
+   una franja vertical; el 37% la centra en la torta. */
+.era--fuchsia {
+  background: var(--bg) url("../assets/fotos/web/torta.webp") 37% 50% / cover no-repeat;
+}
+/* el botón es transparente y abajo cae sobre el guante negro */
+.era--fuchsia .btn {
+  background: color-mix(in oklch, white 72%, transparent);
+  backdrop-filter: blur(6px);
+}
 
 .lens {
   position: relative;
@@ -164,6 +269,9 @@ body[data-era="5"]::before { opacity: 1; }
   inset: -14%;
   width: 128%;
   height: 128%;
+  /* base.css limita los svg al 100% y eso achicaba el anillo y lo corría
+     a la izquierda: tiene que ser más grande que la lente para rodearla */
+  max-width: none;
   animation: spin 26s linear infinite;
   overflow: visible;
 }
@@ -179,6 +287,8 @@ body[data-era="5"]::before { opacity: 1; }
   inset: 0;
   border-radius: 50%;
   overflow: hidden;
+  /* Safari no recorta con border-radius un video transformado; clip-path sí */
+  clip-path: circle(50%);
   background: var(--bg-2);
   box-shadow:
     inset 0 0 0 3px color-mix(in oklch, var(--ink) 85%, transparent),
@@ -186,7 +296,8 @@ body[data-era="5"]::before { opacity: 1; }
     0 1.5rem 3.5rem -1.5rem color-mix(in oklch, var(--ink) 60%, transparent);
 }
 .lens__media { position: absolute; inset: 0; }
-.lens__media img {
+.lens__media img,
+.lens__media video {
   width: 100%; height: 100%;
   object-fit: cover;
   /* la exageración de escala hace el efecto de lente sin filtros frágiles */
@@ -478,4 +589,5 @@ body[data-era="5"]::before { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
   .lens__ring, .ball__sphere, .house, .map__pulse { animation: none !important; }
   .ball__glow { transform: none; opacity: 0.6; }
+  .colgante { animation: none; }
 }
