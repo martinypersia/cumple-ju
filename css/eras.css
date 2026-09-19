@@ -16,7 +16,7 @@ body[data-era="0"] {
 
 /* ---------- 1 · Fine Line (2019) · fucsia ---------- */
 body[data-era="1"] {
-  --bg:        oklch(0.66 0.200 352);
+  --bg:        oklch(0.811 0.042 14);   /* rosa de la pared de la foto */
   --bg-2:      oklch(0.55 0.190 350);
   --ink:       oklch(0.19 0.080 330);
   --ink-dim:   oklch(0.245 0.090 335);
@@ -247,10 +247,37 @@ body[data-era="5"]::before { opacity: 1; }
    1 · LENTE (Fine Line)
    ============================================================ */
 
-/* fondo: el cuarto pastel con la porción de torta. En el celular se ve
-   una franja vertical; el 37% la centra en la torta. */
-.era--fuchsia {
-  background: var(--bg) url("../assets/fotos/web/torta.webp?v=2") 37% 50% / cover no-repeat;
+/* fondo: el cuarto celeste y rosa con la porción de torta en el guante.
+   La foto es vertical: en el celular entra de alto y sólo se recortan los
+   costados. En la PC se ve una franja horizontal; el 75% la baja hasta
+   la torta.
+   Va en una capa propia para poder difuminarla sola: al entrar, la foto
+   aparece desenfocada y se aclara; recién después entra el contenido.
+   Debajo, el rosa de la pared, así el fundido no pasa por el fucsia. */
+.era--fuchsia { background: var(--bg); }
+.era--fuchsia::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: url("../assets/fotos/web/torta2.webp") 50% 75% / cover no-repeat;
+  opacity: 0;
+  filter: blur(16px);
+  scale: 1.08;
+  transition:
+    opacity 900ms var(--ease-quart),
+    filter 1400ms var(--ease-quart),
+    scale 1600ms var(--ease-expo);
+}
+.era--fuchsia.is-active::before {
+  opacity: 1;
+  filter: blur(0);
+  scale: 1;
+}
+/* texto, lente y botón esperan a que la foto termine de aparecer */
+.era--fuchsia.is-active [data-reveal] {
+  animation-delay: calc(1500ms + var(--i, 0) * 90ms);
 }
 /* título en serif setentosa, blanda e itálica, a tono con lo retro de
    Fine Line; sombra en escalón con el azul y el amarillo de la era, y un
@@ -281,11 +308,27 @@ body[data-era="5"]::before { opacity: 1; }
     0 0 1rem rgb(0 0 0 / 0.9),
     0 0 1.75rem rgb(0 0 0 / 0.6);
 }
-/* el botón es transparente y abajo cae sobre el guante negro */
+/* sobre la foto pastel un botón claro se pierde: va lleno, en el azul de
+   la era, con el mismo escalón amarillo que el título; al tocarlo se
+   hunde sobre su sombra */
 .era--fuchsia .btn {
-  background: color-mix(in oklch, white 72%, transparent);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
+  padding: 1rem 2rem;
+  font-size: var(--fs-body);
+  font-weight: 700;
+  color: var(--on-accent);
+  background: var(--accent);
+  border-color: transparent;
+  box-shadow:
+    0.25rem 0.25rem 0 var(--accent-2),
+    0 0.75rem 2rem -0.5rem rgb(0 0 0 / 0.45);
+  transition: transform 160ms var(--ease-expo), box-shadow 160ms var(--ease-expo), filter 320ms;
+}
+.era--fuchsia .btn:hover { background: var(--accent); border-color: transparent; filter: brightness(1.12); }
+.era--fuchsia .btn:active {
+  transform: translate(0.2rem, 0.2rem);
+  box-shadow:
+    0.05rem 0.05rem 0 var(--accent-2),
+    0 0.4rem 1rem -0.5rem rgb(0 0 0 / 0.45);
 }
 
 .lens {
