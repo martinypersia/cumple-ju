@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Chivo+Mono:wght@300..700&family=Figtree:wght@300..900&family=Fraunces:ital,opsz,wght,SOFT,WONK@1,9..144,600..900,0..100,0..1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/base.css?v=3">
-<link rel="stylesheet" href="css/eras.css?v=13">
+<link rel="stylesheet" href="css/eras.css?v=14">
 </head>
 <body data-era="0">
 
@@ -169,42 +169,15 @@
     <div class="era__inner">
       <h2 class="display display--lg" data-bind="lugarNombre" data-reveal>Barrio Portal de los Sauces</h2>
 
-      <div class="radar" data-reveal aria-hidden="true">
-        <svg class="radar__plano" viewBox="0 0 320 200" fill="none">
-          <!-- pathLength=1 en cada calle: así una sola animación de
-               stroke-dashoffset las dibuja todas al mismo ritmo, midan lo
-               que midan -->
-          <path class="radar__calle" pathLength="1" d="M56 152h208a16 16 0 0 0 16-16V64a16 16 0 0 0-16-16H56a16 16 0 0 0-16 16v72a16 16 0 0 0 16 16Z"/>
-          <path class="radar__calle" pathLength="1" d="M124 152v40"/>
-          <path class="radar__calle" pathLength="1" d="M160 48v104"/>
-          <path class="radar__calle" pathLength="1" d="M160 100h120"/>
-          <path class="radar__calle radar__calle--fina" pathLength="1" d="M92 48v104"/>
-          <path class="radar__calle radar__calle--fina" pathLength="1" d="M40 100h52"/>
-
-          <g class="radar__lotes">
-            <rect x="50" y="58" width="32" height="32" rx="3"/>
-            <rect x="50" y="110" width="32" height="32" rx="3"/>
-            <rect x="102" y="58" width="48" height="32" rx="3"/>
-            <rect x="102" y="110" width="48" height="32" rx="3"/>
-            <rect x="170" y="110" width="46" height="32" rx="3"/>
-            <rect x="226" y="110" width="46" height="32" rx="3"/>
-            <rect x="170" y="58" width="32" height="32" rx="3"/>
-            <rect x="240" y="58" width="32" height="32" rx="3"/>
-          </g>
-
-          <!-- el lote de la casa: relleno, para que el pin caiga adentro -->
-          <rect class="radar__casa" x="208" y="58" width="26" height="32" rx="3"/>
-        </svg>
-
-        <div class="radar__barrido"></div>
-
-        <div class="radar__marca">
-          <span class="radar__eco"></span>
-          <span class="radar__eco"></span>
-          <span class="radar__punto"></span>
-          <span class="radar__mira"></span>
-        </div>
-      </div>
+      <!-- El mapa de verdad. El iframe no recibe toques (ver .mapa en
+           css/eras.css): si los recibiera se tragaría el deslizar del dedo y
+           no se podría pasar de pantalla. El toque lo cobra el enlace de
+           arriba, que abre Google Maps, que es lo que uno quiere hacer con un
+           mapa. El src y el href los pone js/app.js desde CONFIG. -->
+      <a class="mapa" id="mapaCaja" href="#" target="_blank" rel="noopener" data-reveal>
+        <iframe class="mapa__vista" id="mapaVista" title="El barrio en Google Maps"
+                loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </a>
 
       <address class="addr" data-bind="direccion" data-reveal>Casa 19</address>
       <p class="lede" data-joke="donde" data-reveal>Está más cerca de lo que estás pensando.</p>
@@ -213,7 +186,7 @@
       <div class="botonera">
         <a class="btn btn--solid" id="maps" href="#" target="_blank" rel="noopener" data-reveal>Abrir en Google Maps</a>
         <!-- sin data-reveal: este botón no entra con el resto, espera a que el
-             radar enganche la casa (ver .btn--sigue en css/eras.css) -->
+             mapa termine de enfocar (ver .btn--sigue en css/eras.css) -->
         <button class="btn btn--sigue" data-next>Siguiente</button>
       </div>
     </div>
@@ -274,6 +247,6 @@
 
 <audio id="track" loop preload="auto"></audio>
 
-<script type="module" src="js/app.js?v=7"></script>
+<script type="module" src="js/app.js?v=8"></script>
 </body>
 </html>

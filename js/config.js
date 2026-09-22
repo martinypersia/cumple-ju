@@ -23,6 +23,13 @@ export const CONFIG = {
     // arma la búsqueda solo con la dirección de arriba.
     // (cae en Rawson 1825, Maipú, Mendoza)
     mapsUrl: "https://maps.app.goo.gl/uweo7EUuWZYL8ras8",
+    // Lo que busca el mapa que se ve en la pantalla "Dónde es". El link de
+    // arriba no sirve para eso: hace falta la dirección, o las coordenadas
+    // ("-32.9876,-68.7654"), que es lo más exacto. Si lo dejás vacío, busca
+    // con el nombre y la dirección de arriba.
+    mapaConsulta: "Rawson 1825, Maipú, Mendoza",
+    // Cuánto se acerca ese mapa: 15 es el barrio entero, 18 la cuadra.
+    mapaZoom: 17,
     nota: "[Cómo llegar, estacionamiento, timbre, lo que haga falta]",
   },
 

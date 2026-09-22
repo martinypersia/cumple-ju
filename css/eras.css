@@ -566,8 +566,8 @@ body[data-era="5"]::before { opacity: 1; }
 
    Un solo momento: al entrar en la era, la vista cae de órbita. La malla
    y los anillos llegan agrandados y desenfocados y se asientan; recién
-   entonces el plano se dibuja calle por calle, el barrido empieza a girar
-   y la mira se cierra sobre la casa.
+   entonces el mapa termina de enfocar, como una cámara que baja del cielo
+   hasta la cuadra.
 
    Todo es tinta azul sobre el ámbar, nunca un cielo oscuro: la 2 y la 3
    son las dos pantallas claras del recorrido y el texto se apoya en ellas.
@@ -656,119 +656,61 @@ body[data-era="5"]::before { opacity: 1; }
 .nave__cuerpo { fill: color-mix(in oklch, var(--tele) 22%, transparent); }
 .nave__haz    { fill: color-mix(in oklch, var(--tele) 10%, transparent); stroke-dasharray: 3 5; }
 
-/* ---------- el plano: el barrio visto desde arriba ---------- */
+/* ---------- el mapa: el barrio de verdad ---------- */
 
-.radar {
+.mapa {
   position: relative;
-  /* El plano es lo más alto de la vista: si crece libre, el botón de avanzar
+  display: block;
+  /* El mapa es lo más alto de la vista: si crece libre, el botón de avanzar
      queda abajo del borde y hay que adivinar que está. Atado al alto de la
-     pantalla se achica solo donde falta lugar, y como recorta el ancho (no el
-     alto) la proporción 8/5 no se toca y el pin sigue cayendo en su lote.
-     En un celular alto el 100% sigue mandando: ahí no cambia nada. */
+     pantalla se achica solo donde falta lugar. En un celular alto el 100%
+     sigue mandando: ahí no cambia nada. */
   width: min(100%, calc(28dvh * 1.6));
-  /* mismo alto que el viewBox del plano: así el pin cae donde tiene que caer */
   aspect-ratio: 8 / 5;
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid color-mix(in oklch, var(--tele) 38%, transparent);
-  background:
-    radial-gradient(120% 120% at 70% 35%, color-mix(in oklch, var(--bg-2) 70%, transparent), transparent 70%),
-    color-mix(in oklch, var(--ink) 5%, transparent);
+  /* el color de fondo se ve mientras Google todavía no cargó: la caja nunca
+     aparece como un agujero blanco en el ámbar */
+  background: color-mix(in oklch, var(--ink) 5%, transparent);
+  /* la sombra lo despega del fondo, que acá es cielo con satélite y no una
+     pared plana */
+  box-shadow: 0 1.25rem 3rem -1.5rem color-mix(in oklch, var(--ink) 55%, transparent);
 }
 
-.radar__plano { position: absolute; inset: 0; width: 100%; height: 100%; }
-
-.radar__calle {
-  stroke: color-mix(in oklch, var(--tele) 55%, transparent);
-  stroke-width: 7;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 1;   /* con pathLength=1, una vuelta entera */
-  stroke-dashoffset: 0;
-}
-.radar__calle--fina { stroke-width: 4; opacity: 0.6; }
-
-.radar__lotes rect {
-  fill: color-mix(in oklch, var(--tele) 11%, transparent);
-  stroke: color-mix(in oklch, var(--tele) 26%, transparent);
-  stroke-width: 1.5;
-}
-
-.radar__casa {
-  fill: color-mix(in oklch, var(--accent-2) 55%, transparent);
-  stroke: var(--accent-2);
-  stroke-width: 2;
-}
-
-/* el barrido: un cuadrado más grande que la caja, girando y recortado por
-   el overflow del plano. Gira el elemento, no el gradiente: así el trabajo
-   queda en la GPU.
-   El centrado va por margen negativo (el % se mide contra el ancho del plano,
-   y el alto es igual por el aspect-ratio): con `translate` suelto, Safari lo
-   perdía al arrancar el giro y el cuadrado del barrido asomaba en una esquina
-   del plano en vez de quedar centrado y recortado en redondo. */
-.radar__barrido {
+.mapa__vista {
   position: absolute;
-  top: 50%; left: 50%;
-  width: 150%;
-  aspect-ratio: 1;
-  margin: -75% 0 0 -75%;
-  border-radius: 50%;
-  background: conic-gradient(
-    from 0deg,
-    transparent 0deg 288deg,
-    color-mix(in oklch, var(--tele) 9%,  transparent) 330deg,
-    color-mix(in oklch, var(--tele) 26%, transparent) 358deg,
-    transparent 360deg);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  /* el iframe no se toca: los toques y el deslizar son del enlace que lo
+     envuelve, y así el dedo sigue pudiendo pasar de pantalla */
+  pointer-events: none;
 }
 
-/* la marca sobre la casa: centro del lote, en porcentaje del viewBox */
-.radar__marca {
+/* Google llega con sus grises y su blanco, que en esta pantalla ámbar
+   cantan. Un velo del color de la era lo integra sin tapar las calles, y se
+   corre al pasar el mouse para que se lea mejor cuando alguien lo está
+   mirando en serio. En el celular no hay hover: ahí queda el velo, que es
+   como se ve la mayoría de las veces.
+   Velo de color y no `mix-blend-mode`: mezclar contra un iframe es
+   justamente donde Safari deja restos, y de eso venimos. */
+.mapa::after {
+  content: "";
   position: absolute;
-  left: 69.1%;
-  top: 37%;
-  width: 0; height: 0;
+  inset: 0;
+  pointer-events: none;
+  background: color-mix(in oklch, var(--accent-2) 22%, transparent);
+  transition: opacity 420ms var(--ease-quart);
 }
-
-.radar__punto {
-  position: absolute;
-  left: -0.4rem; top: -0.4rem;
-  width: 0.8rem; height: 0.8rem;
-  border-radius: 50%;
-  background: var(--accent-2);
-  box-shadow: 0 0 0 3px color-mix(in oklch, var(--bg) 85%, transparent);
-}
-
-.radar__eco {
-  position: absolute;
-  left: -0.4rem; top: -0.4rem;
-  width: 0.8rem; height: 0.8rem;
-  border-radius: 50%;
-  border: 1.5px solid var(--accent-2);
-  opacity: 0;
-}
-
-/* la mira: cuatro escuadras, no una cruz de ícono */
-.radar__mira {
-  position: absolute;
-  left: -1.45rem; top: -1.45rem;
-  width: 2.9rem; height: 2.9rem;
-  --e: color-mix(in oklch, var(--accent-2) 85%, transparent);
-  background:
-    linear-gradient(var(--e), var(--e)) 0    0    / 0.8rem 1.5px no-repeat,
-    linear-gradient(var(--e), var(--e)) 0    0    / 1.5px 0.8rem no-repeat,
-    linear-gradient(var(--e), var(--e)) 100% 0    / 0.8rem 1.5px no-repeat,
-    linear-gradient(var(--e), var(--e)) 100% 0    / 1.5px 0.8rem no-repeat,
-    linear-gradient(var(--e), var(--e)) 0    100% / 0.8rem 1.5px no-repeat,
-    linear-gradient(var(--e), var(--e)) 0    100% / 1.5px 0.8rem no-repeat,
-    linear-gradient(var(--e), var(--e)) 100% 100% / 0.8rem 1.5px no-repeat,
-    linear-gradient(var(--e), var(--e)) 100% 100% / 1.5px 0.8rem no-repeat;
-}
+.mapa:hover::after,
+.mapa:focus-visible::after { opacity: 0; }
 
 /* ---------- el descenso ---------- */
 
 /* Sólo con la era puesta. El contenido ya es legible sin estas reglas:
-   si algo fallara, se ve el plano quieto y completo. */
+   si algo fallara, se ve el mapa quieto y enfocado. */
 .era--amber.is-active .orbita__malla    { animation: caer 1400ms var(--ease-expo) backwards; }
 .era--amber.is-active .orbita__anillos  { animation: caer 1600ms var(--ease-expo) 80ms backwards; }
 .era--amber.is-active .orbita__polvo    { animation: caer 1200ms var(--ease-expo) 160ms backwards; }
@@ -779,28 +721,8 @@ body[data-era="5"]::before { opacity: 1; }
 
 .era--amber.is-active .orbita__nave { animation: sobrevolar 26s linear 1.2s infinite backwards; }
 
-/* el plano llega desenfocado, como enfocar una cámara desde muy arriba */
-.era--amber.is-active .radar    { animation: enfocar 1100ms var(--ease-expo) 240ms backwards; }
-.era--amber.is-active .radar__calle   { animation: trazar 900ms var(--ease-quart) 700ms backwards; }
-.era--amber.is-active .radar__lotes rect { animation: asentar 520ms var(--ease-expo) backwards; }
-.era--amber.is-active .radar__casa    { animation: asentar 520ms var(--ease-expo) 1500ms backwards; }
-.era--amber.is-active .radar__barrido { animation: girar 4.6s linear 1.4s infinite backwards; }
-.era--amber.is-active .radar__punto   { animation: asentar 420ms var(--ease-expo) 1680ms backwards; }
-.era--amber.is-active .radar__mira    { animation: enganchar 620ms var(--ease-expo) 1620ms backwards; }
-
-/* los lotes caen escalonados, no todos juntos */
-.era--amber.is-active .radar__lotes rect:nth-child(1) { animation-delay: 1000ms; }
-.era--amber.is-active .radar__lotes rect:nth-child(2) { animation-delay: 1070ms; }
-.era--amber.is-active .radar__lotes rect:nth-child(3) { animation-delay: 1140ms; }
-.era--amber.is-active .radar__lotes rect:nth-child(4) { animation-delay: 1210ms; }
-.era--amber.is-active .radar__lotes rect:nth-child(5) { animation-delay: 1280ms; }
-.era--amber.is-active .radar__lotes rect:nth-child(6) { animation-delay: 1350ms; }
-.era--amber.is-active .radar__lotes rect:nth-child(7) { animation-delay: 1420ms; }
-.era--amber.is-active .radar__lotes rect:nth-child(8) { animation-delay: 1490ms; }
-
-/* el eco de señal: recién después de que la mira enganchó */
-.era--amber.is-active .radar__eco:nth-child(1) { animation: eco 3s var(--ease-quart) 2.2s infinite; }
-.era--amber.is-active .radar__eco:nth-child(2) { animation: eco 3s var(--ease-quart) 3.7s infinite; }
+/* el mapa llega desenfocado, como enfocar una cámara desde muy arriba */
+.era--amber.is-active .mapa { animation: enfocar 1100ms var(--ease-expo) 240ms backwards; }
 
 /* ---------- el botón de avanzar ---------- */
 
@@ -834,7 +756,7 @@ body[data-era="5"]::before { opacity: 1; }
   border-color: var(--ink-dim);
   background: color-mix(in oklch, var(--bg-2) 55%, transparent);
   visibility: hidden;
-  /* contra el borde derecho del bloque, alineado con el canto del plano:
+  /* contra el borde derecho del bloque, alineado con el canto del mapa:
      el resto de la vista se lee de izquierda a derecha y el que sigue
      espera del lado al que se avanza. margin y no align-self: así queda a la
      derecha también si la fila se parte en dos renglones */
@@ -849,22 +771,6 @@ body[data-era="5"]::before { opacity: 1; }
 @keyframes enfocar {
   from { opacity: 0; transform: scale(1.07) translateY(-0.75rem); filter: blur(10px); }
   to   { opacity: 1; transform: none;                             filter: blur(0); }
-}
-@keyframes trazar {
-  from { stroke-dashoffset: 1; }
-  to   { stroke-dashoffset: 0; }
-}
-@keyframes asentar {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@keyframes enganchar {
-  from { opacity: 0; transform: scale(2.1) rotate(-12deg); }
-  to   { opacity: 1; transform: none; }
-}
-@keyframes eco {
-  from { opacity: 0.85; transform: scale(1); }
-  to   { opacity: 0;    transform: scale(5.5); }
 }
 /* el 1% está para que el botón siga oculto durante la espera: con both, el
    navegador mantiene el primer fotograma mientras corre el delay */
@@ -885,22 +791,15 @@ body[data-era="5"]::before { opacity: 1; }
   100% { opacity: 0;   transform: translate(112vw, 2.5rem) rotate(-8deg); }
 }
 
-/* Movimiento reducido: el descenso desaparece, el plano queda dibujado y
-   enfocado, y la casa se sigue distinguiendo por color y por la mira. No
-   se pierde ni un dato: la dirección es texto, acá al lado. */
+/* Movimiento reducido: el descenso desaparece y el mapa queda quieto y
+   enfocado desde el arranque. No se pierde ni un dato: la dirección es
+   texto, acá al lado. */
 @media (prefers-reduced-motion: reduce) {
   .orbita__malla,
   .orbita__anillos,
   .orbita__anillos span,
   .orbita__polvo,
-  .radar,
-  .radar__calle,
-  .radar__lotes rect,
-  .radar__casa,
-  .radar__barrido,
-  .radar__punto,
-  .radar__mira,
-  .radar__eco {
+  .mapa {
     animation: none !important;
     opacity: 1;
     transform: none;
@@ -909,9 +808,6 @@ body[data-era="5"]::before { opacity: 1; }
   .orbita__nave { animation: none !important; left: 8%; opacity: 0.4; }
   /* sin descenso no hay nada que esperar: el botón está desde el arranque */
   .btn--sigue { animation: none !important; visibility: visible; opacity: 1; transform: none; }
-  .radar__eco { display: none; }
-  /* sin giro, el barrido sería una mancha fija en una esquina */
-  .radar__barrido { display: none; }
 }
 
 /* ============================================================

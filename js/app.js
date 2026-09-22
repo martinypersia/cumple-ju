@@ -1,4 +1,4 @@
-import { CONFIG } from "./config.js?v=7";
+import { CONFIG } from "./config.js?v=8";
 import { audio } from "./audio.js?v=2";
 import { crearAgua } from "./water.js?v=2";
 import { crearBola } from "./bola.js?v=2";
@@ -86,11 +86,33 @@ document.fonts.ready.then(ajustarAnillo);
 
 // Mapa.
 const maps = $("#maps");
+const direccion = [CONFIG.lugar?.nombre, CONFIG.lugar?.direccion].filter(Boolean).join(" ");
 const consulta = CONFIG.lugar?.mapsUrl
-  || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-       [CONFIG.lugar?.nombre, CONFIG.lugar?.direccion].filter(Boolean).join(" ")
-     )}`;
+  || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(direccion)}`;
 maps.href = consulta;
+
+// El mapa embebido. `output=embed` es la forma vieja de Google y no pide
+// clave de API: la del Embed API sí, y quedaría escrita en un archivo que
+// cualquiera puede leer desde el navegador.
+// La caja entera es el link: tocarla abre Maps igual que el botón.
+const mapaCaja = $("#mapaCaja");
+const mapaVista = $("#mapaVista");
+const eraDelMapa = mapaCaja?.closest(".era") ?? null;
+
+// El mapa pesa. No se pide al abrir la invitación: lo pide `ir()` una
+// pantalla antes, así llega cargado al que avanza y no gasta datos del que
+// se queda mirando la portada.
+function cargarMapa() {
+  if (!mapaVista || mapaVista.src) return;
+  const busqueda = CONFIG.lugar?.mapaConsulta?.trim() || direccion;
+  mapaVista.src = `https://www.google.com/maps?q=${encodeURIComponent(busqueda)}`
+    + `&z=${CONFIG.lugar?.mapaZoom || 17}&hl=es&output=embed`;
+}
+
+if (mapaCaja) {
+  mapaCaja.href = consulta;
+  mapaCaja.setAttribute("aria-label", `Ver ${direccion || "el lugar"} en Google Maps`);
+}
 
 // Nota de cómo llegar.
 if (CONFIG.lugar?.nota && !CONFIG.lugar.nota.startsWith("[")) {
@@ -276,6 +298,9 @@ function ir(i) {
   document.body.dataset.era = String(destino);
   eras[destino].scrollTop = 0;
   current = destino;
+
+  // el mapa se pide al llegar a la pantalla anterior, no antes
+  if (eraDelMapa && (eras[destino] === eraDelMapa || eras[destino + 1] === eraDelMapa)) cargarMapa();
 
   // el agua y la bola sólo se animan mientras se ven: ahorra batería en el celular
   if (destino === 0) { agua.activar(); bola.activar(); }

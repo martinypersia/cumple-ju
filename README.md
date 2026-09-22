@@ -18,6 +18,8 @@ Todo lo editable vive en **`js/config.js`**. Es el único archivo que necesitás
 | `horaFin` | Texto libre |
 | `lugar.nombre` / `lugar.direccion` | Dónde es |
 | `lugar.mapsUrl` | Link de Google Maps. Si lo dejás vacío, el botón busca por dirección |
+| `lugar.mapaConsulta` | Lo que busca el mapa de la pantalla "Dónde es": dirección o coordenadas. Vacío, usa nombre y dirección |
+| `lugar.mapaZoom` | Cuánto se acerca ese mapa: 15 es el barrio, 18 la cuadra |
 | `lugar.nota` | Estacionamiento, timbre, cómo entrar |
 | `whatsappGrupo` | `https://chat.whatsapp.com/...` |
 | `audio` | Nombre del MP3 dentro de `assets/audio/` |
