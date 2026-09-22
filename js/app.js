@@ -1,4 +1,4 @@
-import { CONFIG } from "./config.js?v=3";
+import { CONFIG } from "./config.js?v=6";
 import { audio } from "./audio.js?v=2";
 import { crearAgua } from "./water.js?v=2";
 import { crearBola } from "./bola.js?v=2";
@@ -40,7 +40,8 @@ const valores = {
   edad: CONFIG.edad,
   diaLargo: fechaOk ? cap(diaTexto()) : "[falta la fecha]",
   diaCorto: fechaOk ? diaTexto() : "[falta la fecha]",
-  hora: fechaOk ? fmt({ hour: "2-digit", minute: "2-digit" }) + " h" : "—",
+  // hour12:false: sin esto es-AR cae en 12 h y las 13:00 salen "01:00 p. m."
+  hora: fechaOk ? fmt({ hour: "2-digit", minute: "2-digit", hour12: false }) + " h" : "—",
   horaFin: CONFIG.horaFin || "—",
   lugarNombre: CONFIG.lugar?.nombre || "[NOMBRE DEL LUGAR]",
   direccion: CONFIG.lugar?.direccion || "[Calle 1234, Ciudad]",
@@ -144,6 +145,14 @@ marcos.forEach((foto, i) => {
 
   gallery.append(fig);
 });
+
+// Con una sola foto no hay carrusel: se centra y se agranda, el número de
+// orden no numera nada y el pie invitaría a deslizar hacia la nada.
+if (fotos.length === 1) {
+  gallery.classList.add("gallery--una");
+  $(".shot__n", gallery)?.remove();
+  $("#galeriaPie").hidden = true;
+}
 
 /* ============================================================
    ODÓMETRO

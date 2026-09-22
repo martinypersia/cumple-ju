@@ -12,16 +12,17 @@ export const CONFIG = {
 
   // --- Cuándo ---
   // Formato ISO con huso horario. Argentina es -03:00.
-  fecha: "2026-10-03T12:00:00-03:00", // sábado 3 de octubre, mediodía
-  horaFin: "[hasta que aguantemos]",
+  fecha: "2026-10-03T13:00:00-03:00", // sábado 3 de octubre, 13 h
+  horaFin: "[hasta que los eche]",
 
   // --- Dónde ---
   lugar: {
-    nombre: "[NOMBRE DEL LUGAR]",
-    direccion: "[Calle 1234, Ciudad]",
+    nombre: "Barrio Portal de los Sauces",
+    direccion: "Casa 19",
     // Pegá acá el link de Google Maps. Si lo dejás vacío, el botón
     // arma la búsqueda solo con la dirección de arriba.
-    mapsUrl: "",
+    // (cae en Rawson 1825, Maipú, Mendoza)
+    mapsUrl: "https://maps.app.goo.gl/uweo7EUuWZYL8ras8",
     nota: "[Cómo llegar, estacionamiento, timbre, lo que haga falta]",
   },
 
@@ -38,7 +39,9 @@ export const CONFIG = {
   // Dejá las fotos en assets/fotos/ y listalas acá.
   // Si el array queda vacío, se muestran marcos vacíos con instrucciones.
   // Ejemplo: [{ src: "assets/fotos/01.webp", alt: "Juli en el after, 2024" }]
-  fotos: [],
+  fotos: [
+    { src: "assets/fotos/web/luju.webp", alt: "Juli y Lucas" },
+  ],
 
   // La foto que va adentro del círculo de la segunda pantalla.
   // Dejala en null y queda un marco vacío.

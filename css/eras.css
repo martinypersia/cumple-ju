@@ -315,22 +315,24 @@ body[data-era="5"]::before { opacity: 1; }
     0 0 1rem rgb(0 0 0 / 0.9),
     0 0 1.75rem rgb(0 0 0 / 0.6);
 }
-/* sobre la foto pastel un botón claro se pierde: va lleno, en el azul de
-   la era, con el mismo escalón amarillo que el título; al tocarlo se
-   hunde sobre su sombra */
+/* sobre la foto pastel un botón claro se pierde: va lleno, en celeste, con
+   el mismo escalón amarillo que el título; al ser un celeste claro el
+   texto va en el marrón oscuro de la era; al tocarlo se hunde sobre su
+   sombra */
 .era--fuchsia .btn {
+  --btn-bg: oklch(0.815 0.115 225);   /* celeste */
   padding: 1rem 2rem;
   font-size: var(--fs-body);
   font-weight: 700;
-  color: var(--on-accent);
-  background: var(--accent);
+  color: var(--ink);
+  background: var(--btn-bg);
   border-color: transparent;
   box-shadow:
     0.25rem 0.25rem 0 var(--accent-2),
     0 0.75rem 2rem -0.5rem rgb(0 0 0 / 0.45);
   transition: transform 160ms var(--ease-expo), box-shadow 160ms var(--ease-expo), filter 320ms;
 }
-.era--fuchsia .btn:hover { background: var(--accent); border-color: transparent; filter: brightness(1.12); }
+.era--fuchsia .btn:hover { background: var(--btn-bg); border-color: transparent; filter: brightness(1.06); }
 .era--fuchsia .btn:active {
   transform: translate(0.2rem, 0.2rem);
   box-shadow:
@@ -559,52 +561,331 @@ body[data-era="5"]::before { opacity: 1; }
 }
 
 /* ============================================================
-   3 · MAPA
-   ============================================================ */
+   3 · SATELLITE — el descenso hasta la casa
+   ============================================================
 
-.map {
+   Un solo momento: al entrar en la era, la vista cae de órbita. La malla
+   y los anillos llegan agrandados y desenfocados y se asientan; recién
+   entonces el plano se dibuja calle por calle, el barrido empieza a girar
+   y la mira se cierra sobre la casa.
+
+   Todo es tinta azul sobre el ámbar, nunca un cielo oscuro: la 2 y la 3
+   son las dos pantallas claras del recorrido y el texto se apoya en ellas.
+   Los bucles cuelgan de .is-active, así que en las otras cinco pantallas
+   no queda nada animándose contra la batería del celular. */
+
+.era--amber {
+  /* azul profundo de la era, tirado al marrón para que no vibre sobre el
+     naranja; todo el instrumental sale de acá */
+  --tele: color-mix(in oklch, var(--accent) 78%, var(--ink));
+}
+
+/* ---------- la órbita: capa de fondo a pantalla completa ---------- */
+
+/* fixed y no absolute: la sección puede desplazarse y el fondo tiene que
+   seguir cubriendo la pantalla. Al colgar de una era oculta hereda
+   visibility:hidden y no se asoma en las demás. */
+.orbita {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* la grilla de coordenadas */
+.orbita__malla {
+  position: absolute;
+  inset: -10%;
+  background-image:
+    linear-gradient(to right,  color-mix(in oklch, var(--tele) 15%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklch, var(--tele) 15%, transparent) 1px, transparent 1px);
+  background-size: 3.5rem 3.5rem;
+  /* se abre desde el centro: en los bordes la grilla estorbaría al texto.
+     El prefijo es por los iPhone anteriores a iOS 15.4 */
+  -webkit-mask-image: radial-gradient(120% 85% at 50% 42%, #000 15%, transparent 78%);
+          mask-image: radial-gradient(120% 85% at 50% 42%, #000 15%, transparent 78%);
+}
+
+/* las órbitas: tres elipses en perspectiva, cada una a su ritmo */
+.orbita__anillos { position: absolute; inset: 0; }
+.orbita__anillos span {
+  position: absolute;
+  top: 50%; left: 50%;
+  border: 1px solid color-mix(in oklch, var(--tele) 22%, transparent);
+  border-radius: 50%;
+  translate: -50% -50%;
+}
+.orbita__anillos span:nth-child(1) { width: 128vmin; height: 128vmin; }
+.orbita__anillos span:nth-child(2) { width: 88vmin;  height: 88vmin;  border-style: dashed; }
+.orbita__anillos span:nth-child(3) { width: 52vmin;  height: 52vmin; }
+
+/* las balizas: puntos fijos de telemetría, no un cielo estrellado */
+.orbita__polvo {
+  position: absolute;
+  inset: 0;
+  --p: color-mix(in oklch, var(--tele) 42%, transparent);
+  background-image:
+    radial-gradient(circle, var(--p) 1.5px, transparent 1.5px),
+    radial-gradient(circle, var(--p) 1.5px, transparent 1.5px),
+    radial-gradient(circle, var(--p) 1px,   transparent 1px),
+    radial-gradient(circle, var(--p) 1px,   transparent 1px),
+    radial-gradient(circle, var(--p) 1.5px, transparent 1.5px),
+    radial-gradient(circle, var(--p) 1px,   transparent 1px),
+    radial-gradient(circle, var(--p) 1px,   transparent 1px);
+  background-repeat: no-repeat;
+  background-position: 12% 14%, 82% 22%, 28% 72%, 68% 84%, 91% 61%, 7% 47%, 46% 9%;
+}
+
+/* el satélite */
+.orbita__nave {
+  position: absolute;
+  top: 14%;
+  left: 0;
+  width: clamp(4.5rem, 16vw, 7rem);
+  height: auto;
+  opacity: 0.5;
+  stroke: var(--tele);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.nave__panel  { fill: color-mix(in oklch, var(--tele) 12%, transparent); }
+.nave__cuerpo { fill: color-mix(in oklch, var(--tele) 22%, transparent); }
+.nave__haz    { fill: color-mix(in oklch, var(--tele) 10%, transparent); stroke-dasharray: 3 5; }
+
+/* ---------- el plano: el barrio visto desde arriba ---------- */
+
+.radar {
   position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 9;
+  /* El plano es lo más alto de la vista: si crece libre, el botón de avanzar
+     queda abajo del borde y hay que adivinar que está. Atado al alto de la
+     pantalla se achica solo donde falta lugar, y como recorta el ancho (no el
+     alto) la proporción 8/5 no se toca y el pin sigue cayendo en su lote.
+     En un celular alto el 100% sigue mandando: ahí no cambia nada. */
+  width: min(100%, calc(28dvh * 1.6));
+  /* mismo alto que el viewBox del plano: así el pin cae donde tiene que caer */
+  aspect-ratio: 8 / 5;
   border-radius: 16px;
   overflow: hidden;
-  border: 1.5px solid var(--line);
-  background: color-mix(in oklch, var(--ink) 7%, transparent);
+  border: 1px solid color-mix(in oklch, var(--tele) 38%, transparent);
+  background:
+    radial-gradient(120% 120% at 70% 35%, color-mix(in oklch, var(--bg-2) 70%, transparent), transparent 70%),
+    color-mix(in oklch, var(--ink) 5%, transparent);
 }
-.map__road {
-  position: absolute;
-  background: color-mix(in oklch, var(--bg) 78%, var(--ink));
-  border-radius: 2px;
+
+.radar__plano { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+.radar__calle {
+  stroke: color-mix(in oklch, var(--tele) 55%, transparent);
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;   /* con pathLength=1, una vuelta entera */
+  stroke-dashoffset: 0;
 }
-.map__road--a { left: -10%; right: -10%; top: 44%; height: 9%; transform: rotate(-6deg); }
-.map__road--b { top: -20%; bottom: -20%; left: 26%; width: 7%; transform: rotate(9deg); }
-.map__road--c { left: -10%; right: 40%; top: 74%; height: 5%; transform: rotate(4deg); }
-.map__park {
-  position: absolute;
-  right: 8%; top: 12%;
-  width: 26%; height: 30%;
-  border-radius: 10px;
-  background: color-mix(in oklch, var(--accent) 30%, transparent);
+.radar__calle--fina { stroke-width: 4; opacity: 0.6; }
+
+.radar__lotes rect {
+  fill: color-mix(in oklch, var(--tele) 11%, transparent);
+  stroke: color-mix(in oklch, var(--tele) 26%, transparent);
+  stroke-width: 1.5;
 }
-.map__pin {
+
+.radar__casa {
+  fill: color-mix(in oklch, var(--accent-2) 55%, transparent);
+  stroke: var(--accent-2);
+  stroke-width: 2;
+}
+
+/* el barrido: un cuadrado más grande que la caja, girando y recortado por
+   el overflow del plano. Gira el elemento, no el gradiente: así el trabajo
+   queda en la GPU. */
+.radar__barrido {
   position: absolute;
-  left: 50%; top: 47%;
-  width: 1.1rem; height: 1.1rem;
-  margin: -0.55rem 0 0 -0.55rem;
+  top: 50%; left: 50%;
+  width: 150%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg 288deg,
+    color-mix(in oklch, var(--tele) 9%,  transparent) 330deg,
+    color-mix(in oklch, var(--tele) 26%, transparent) 358deg,
+    transparent 360deg);
+}
+
+/* la marca sobre la casa: centro del lote, en porcentaje del viewBox */
+.radar__marca {
+  position: absolute;
+  left: 69.1%;
+  top: 37%;
+  width: 0; height: 0;
+}
+
+.radar__punto {
+  position: absolute;
+  left: -0.4rem; top: -0.4rem;
+  width: 0.8rem; height: 0.8rem;
   border-radius: 50%;
   background: var(--accent-2);
-  box-shadow: 0 0 0 4px color-mix(in oklch, var(--bg) 80%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--bg) 85%, transparent);
 }
-.map__pulse {
+
+.radar__eco {
   position: absolute;
-  inset: -0.35rem;
+  left: -0.4rem; top: -0.4rem;
+  width: 0.8rem; height: 0.8rem;
   border-radius: 50%;
-  border: 2px solid var(--accent-2);
-  animation: pulse 2.6s var(--ease-quart) infinite;
+  border: 1.5px solid var(--accent-2);
+  opacity: 0;
 }
-@keyframes pulse {
-  0%   { transform: scale(0.6); opacity: 0.9; }
-  100% { transform: scale(3.4); opacity: 0; }
+
+/* la mira: cuatro escuadras, no una cruz de ícono */
+.radar__mira {
+  position: absolute;
+  left: -1.45rem; top: -1.45rem;
+  width: 2.9rem; height: 2.9rem;
+  --e: color-mix(in oklch, var(--accent-2) 85%, transparent);
+  background:
+    linear-gradient(var(--e), var(--e)) 0    0    / 0.8rem 1.5px no-repeat,
+    linear-gradient(var(--e), var(--e)) 0    0    / 1.5px 0.8rem no-repeat,
+    linear-gradient(var(--e), var(--e)) 100% 0    / 0.8rem 1.5px no-repeat,
+    linear-gradient(var(--e), var(--e)) 100% 0    / 1.5px 0.8rem no-repeat,
+    linear-gradient(var(--e), var(--e)) 0    100% / 0.8rem 1.5px no-repeat,
+    linear-gradient(var(--e), var(--e)) 0    100% / 1.5px 0.8rem no-repeat,
+    linear-gradient(var(--e), var(--e)) 100% 100% / 0.8rem 1.5px no-repeat,
+    linear-gradient(var(--e), var(--e)) 100% 100% / 1.5px 0.8rem no-repeat;
+}
+
+/* ---------- el descenso ---------- */
+
+/* Sólo con la era puesta. El contenido ya es legible sin estas reglas:
+   si algo fallara, se ve el plano quieto y completo. */
+.era--amber.is-active .orbita__malla    { animation: caer 1400ms var(--ease-expo) backwards; }
+.era--amber.is-active .orbita__anillos  { animation: caer 1600ms var(--ease-expo) 80ms backwards; }
+.era--amber.is-active .orbita__polvo    { animation: caer 1200ms var(--ease-expo) 160ms backwards; }
+
+.era--amber.is-active .orbita__anillos span:nth-child(1) { animation: girar 92s linear infinite; }
+.era--amber.is-active .orbita__anillos span:nth-child(2) { animation: girar 64s linear infinite reverse; }
+.era--amber.is-active .orbita__anillos span:nth-child(3) { animation: girar 40s linear infinite; }
+
+.era--amber.is-active .orbita__nave { animation: sobrevolar 26s linear 1.2s infinite backwards; }
+
+/* el plano llega desenfocado, como enfocar una cámara desde muy arriba */
+.era--amber.is-active .radar    { animation: enfocar 1100ms var(--ease-expo) 240ms backwards; }
+.era--amber.is-active .radar__calle   { animation: trazar 900ms var(--ease-quart) 700ms backwards; }
+.era--amber.is-active .radar__lotes rect { animation: asentar 520ms var(--ease-expo) backwards; }
+.era--amber.is-active .radar__casa    { animation: asentar 520ms var(--ease-expo) 1500ms backwards; }
+.era--amber.is-active .radar__barrido { animation: girar 4.6s linear 1.4s infinite backwards; }
+.era--amber.is-active .radar__punto   { animation: asentar 420ms var(--ease-expo) 1680ms backwards; }
+.era--amber.is-active .radar__mira    { animation: enganchar 620ms var(--ease-expo) 1620ms backwards; }
+
+/* los lotes caen escalonados, no todos juntos */
+.era--amber.is-active .radar__lotes rect:nth-child(1) { animation-delay: 1000ms; }
+.era--amber.is-active .radar__lotes rect:nth-child(2) { animation-delay: 1070ms; }
+.era--amber.is-active .radar__lotes rect:nth-child(3) { animation-delay: 1140ms; }
+.era--amber.is-active .radar__lotes rect:nth-child(4) { animation-delay: 1210ms; }
+.era--amber.is-active .radar__lotes rect:nth-child(5) { animation-delay: 1280ms; }
+.era--amber.is-active .radar__lotes rect:nth-child(6) { animation-delay: 1350ms; }
+.era--amber.is-active .radar__lotes rect:nth-child(7) { animation-delay: 1420ms; }
+.era--amber.is-active .radar__lotes rect:nth-child(8) { animation-delay: 1490ms; }
+
+/* el eco de señal: recién después de que la mira enganchó */
+.era--amber.is-active .radar__eco:nth-child(1) { animation: eco 3s var(--ease-quart) 2.2s infinite; }
+.era--amber.is-active .radar__eco:nth-child(2) { animation: eco 3s var(--ease-quart) 3.7s infinite; }
+
+/* ---------- el botón de avanzar ---------- */
+
+/* Aparece a 1,5 s, cuando la mira ya se cerró sobre la casa: primero se ve
+   dónde es, después se sigue. Guarda su lugar desde el arranque
+   (visibility, no display) para que al asomar no se corra nada de abajo, y
+   mientras está oculto tampoco se puede tocar ni lo lee un lector. */
+.btn--sigue {
+  border-color: var(--ink-dim);
+  background: color-mix(in oklch, var(--bg-2) 55%, transparent);
+  visibility: hidden;
+  /* va pegado al de Maps: son el mismo par, no dos bloques separados */
+  margin-top: 0;
+  /* contra el borde derecho del bloque, alineado con el canto del plano:
+     el resto de la vista se lee de izquierda a derecha y el que sigue
+     espera del lado al que se avanza */
+  align-self: flex-end;
+}
+.era--amber.is-active .btn--sigue { animation: asomar 760ms var(--ease-expo) 1500ms both; }
+
+@keyframes caer {
+  from { opacity: 0; transform: scale(1.35); filter: blur(7px); }
+  to   { opacity: 1; transform: none;        filter: blur(0); }
+}
+@keyframes enfocar {
+  from { opacity: 0; transform: scale(1.07) translateY(-0.75rem); filter: blur(10px); }
+  to   { opacity: 1; transform: none;                             filter: blur(0); }
+}
+@keyframes trazar {
+  from { stroke-dashoffset: 1; }
+  to   { stroke-dashoffset: 0; }
+}
+@keyframes asentar {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes enganchar {
+  from { opacity: 0; transform: scale(2.1) rotate(-12deg); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes eco {
+  from { opacity: 0.85; transform: scale(1); }
+  to   { opacity: 0;    transform: scale(5.5); }
+}
+/* el 1% está para que el botón siga oculto durante la espera: con both, el
+   navegador mantiene el primer fotograma mientras corre el delay */
+@keyframes asomar {
+  from { opacity: 0; visibility: hidden;  transform: translateY(1.25rem); }
+  1%   { opacity: 0; visibility: visible; }
+  to   { opacity: 1; visibility: visible; transform: none; }
+}
+@keyframes girar {
+  to { transform: rotate(360deg); }
+}
+/* el satélite cruza y vuelve a entrar por el otro lado; el margen de -20%
+   a 120% lo saca de cuadro antes de reaparecer */
+@keyframes sobrevolar {
+  0%   { opacity: 0;   transform: translate(-20vw, 0) rotate(-8deg); }
+  12%  { opacity: 0.5; }
+  88%  { opacity: 0.5; }
+  100% { opacity: 0;   transform: translate(112vw, 2.5rem) rotate(-8deg); }
+}
+
+/* Movimiento reducido: el descenso desaparece, el plano queda dibujado y
+   enfocado, y la casa se sigue distinguiendo por color y por la mira. No
+   se pierde ni un dato: la dirección es texto, acá al lado. */
+@media (prefers-reduced-motion: reduce) {
+  .orbita__malla,
+  .orbita__anillos,
+  .orbita__anillos span,
+  .orbita__polvo,
+  .radar,
+  .radar__calle,
+  .radar__lotes rect,
+  .radar__casa,
+  .radar__barrido,
+  .radar__punto,
+  .radar__mira,
+  .radar__eco {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+  .orbita__anillos span { translate: -50% -50%; }
+  .orbita__nave { animation: none !important; left: 8%; opacity: 0.4; }
+  /* sin descenso no hay nada que esperar: el botón está desde el arranque */
+  .btn--sigue { animation: none !important; visibility: visible; opacity: 1; transform: none; }
+  .radar__eco { display: none; }
+  /* sin giro, el barrido sería una mancha fija en una esquina */
+  .radar__barrido { display: none; }
 }
 
 /* ============================================================
@@ -638,6 +919,15 @@ body[data-era="5"]::before { opacity: 1; }
   -webkit-overflow-scrolling: touch;
 }
 .gallery::-webkit-scrollbar { display: none; }
+
+/* Una sola foto: sin nada que deslizar, se centra y ocupa todo el ancho
+   que le deja la pantalla. */
+.gallery--una {
+  justify-content: center;
+  overflow-x: visible;
+  scroll-snap-type: none;
+}
+.gallery--una .shot { flex-basis: min(80vw, 18.5rem); }
 
 .shot {
   position: relative;
@@ -718,7 +1008,7 @@ body[data-era="5"]::before { opacity: 1; }
    ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
-  .lens__ring, .ball__sphere, .house, .map__pulse { animation: none !important; }
+  .lens__ring, .ball__sphere, .house { animation: none !important; }
   .ball__glow { transform: none; opacity: 0.6; }
   .colgante { animation: none; }
   .casitas { display: none; }

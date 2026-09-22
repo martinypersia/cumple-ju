@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Juli cumple · Una fiesta en cinco eras</title>
-<meta name="description" content="Sábado 3 de octubre, 12 h. Cinco eras de Harry, un cumpleaños. Abrila con sonido.">
+<meta name="description" content="Sábado 3 de octubre, 13 h. Cinco eras de Harry, un cumpleaños. Abrila con sonido.">
 <meta name="theme-color" content="#e9a3bc">
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="Juli cumple · Una fiesta en cinco eras">
-<meta property="og:description" content="Sábado 3 de octubre, 12 h. Cinco eras de Harry, un cumpleaños. Abrila con sonido.">
+<meta property="og:description" content="Sábado 3 de octubre, 13 h. Cinco eras de Harry, un cumpleaños. Abrila con sonido.">
 <meta property="og:image" content="assets/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Chivo+Mono:wght@300..700&family=Figtree:wght@300..900&family=Fraunces:ital,opsz,wght,SOFT,WONK@1,9..144,600..900,0..100,0..1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/base.css?v=2">
-<link rel="stylesheet" href="css/eras.css?v=4">
+<link rel="stylesheet" href="css/eras.css?v=10">
 </head>
 <body data-era="0">
 
@@ -126,13 +126,12 @@
         <rect class="house__win" x="124" y="22" width="22" height="22" rx="2"/>
       </svg>
 
-      <p class="overline" data-reveal>La casa está dada vuelta, la fecha no</p>
-      <h2 class="display display--lg" data-reveal>Anotala ahora<br>y no te hagas el sota</h2>
+      <h2 class="display display--lg" data-reveal>Agendate la fecha<br>y hacete cargo </h2>
 
       <div class="ticket" data-reveal>
-        <div class="ticket__row"><span class="ticket__k">día</span><span class="ticket__v" data-bind="diaLargo">—</span></div>
-        <div class="ticket__row"><span class="ticket__k">hora</span><span class="ticket__v" data-bind="hora">—</span></div>
-        <div class="ticket__row"><span class="ticket__k">hasta</span><span class="ticket__v" data-bind="horaFin">—</span></div>
+        <div class="ticket__row"><span class="ticket__k">Día</span><span class="ticket__v" data-bind="diaLargo">—</span></div>
+        <div class="ticket__row"><span class="ticket__k">Hora</span><span class="ticket__v" data-bind="hora">—</span></div>
+        <div class="ticket__row"><span class="ticket__k">Hasta</span><span class="ticket__v" data-bind="horaFin">—</span></div>
         <span class="ticket__perf" aria-hidden="true"></span>
       </div>
 
@@ -142,30 +141,78 @@
         <p class="sr-only" id="cdText" role="timer" aria-live="off"></p>
       </div>
 
-      <p class="lede" data-joke="cuando" data-reveal>Si llegás tarde no pasa nada, pero la torta no espera.</p>
       <button class="btn" data-next data-reveal>¿Dónde es?</button>
     </div>
   </section>
 
-  <!-- 3 - HARRY'S HOUSE / PATIO - DONDE -->
+  <!-- 3 - HARRY'S HOUSE / PATIO - DONDE
+       "Satellite": la vista baja de órbita hasta la casa. Todo el mundo
+       visual es telemetría azul dibujada encima del ámbar de la era; el
+       ámbar no se oscurece porque la 2 y la 3 son las pantallas claras
+       del recorrido y el texto vive sobre ellas. -->
   <section class="era era--amber" id="era-3" data-era="3" hidden aria-label="Dónde es">
-    <div class="era__inner">
-      <p class="overline" data-reveal>El lugar</p>
-      <h2 class="display display--lg" data-bind="lugarNombre" data-reveal>[NOMBRE DEL LUGAR]</h2>
+    <div class="orbita" aria-hidden="true">
+      <div class="orbita__malla"></div>
+      <div class="orbita__anillos"><span></span><span></span><span></span></div>
+      <div class="orbita__polvo"></div>
+      <!-- el satélite: cruza el cielo en un loop largo, no es un ícono suelto -->
+      <svg class="orbita__nave" viewBox="0 0 140 64" fill="none" aria-hidden="true">
+        <path class="nave__panel" d="M6 20h34v24H6z"/>
+        <path class="nave__panel" d="M100 20h34v24h-34z"/>
+        <path class="nave__mastil" d="M40 32h20M80 32h20"/>
+        <rect class="nave__cuerpo" x="60" y="18" width="20" height="28" rx="3"/>
+        <path class="nave__antena" d="M70 46v10"/>
+        <path class="nave__haz" d="M70 56 48 64h44z"/>
+      </svg>
+    </div>
 
-      <div class="map" data-reveal aria-hidden="true">
-        <div class="map__road map__road--a"></div>
-        <div class="map__road map__road--b"></div>
-        <div class="map__road map__road--c"></div>
-        <div class="map__park"></div>
-        <div class="map__pin"><span class="map__pulse"></span></div>
+    <div class="era__inner">
+      <h2 class="display display--lg" data-bind="lugarNombre" data-reveal>Barrio Portal de los Sauces</h2>
+
+      <div class="radar" data-reveal aria-hidden="true">
+        <svg class="radar__plano" viewBox="0 0 320 200" fill="none">
+          <!-- pathLength=1 en cada calle: así una sola animación de
+               stroke-dashoffset las dibuja todas al mismo ritmo, midan lo
+               que midan -->
+          <path class="radar__calle" pathLength="1" d="M56 152h208a16 16 0 0 0 16-16V64a16 16 0 0 0-16-16H56a16 16 0 0 0-16 16v72a16 16 0 0 0 16 16Z"/>
+          <path class="radar__calle" pathLength="1" d="M124 152v40"/>
+          <path class="radar__calle" pathLength="1" d="M160 48v104"/>
+          <path class="radar__calle" pathLength="1" d="M160 100h120"/>
+          <path class="radar__calle radar__calle--fina" pathLength="1" d="M92 48v104"/>
+          <path class="radar__calle radar__calle--fina" pathLength="1" d="M40 100h52"/>
+
+          <g class="radar__lotes">
+            <rect x="50" y="58" width="32" height="32" rx="3"/>
+            <rect x="50" y="110" width="32" height="32" rx="3"/>
+            <rect x="102" y="58" width="48" height="32" rx="3"/>
+            <rect x="102" y="110" width="48" height="32" rx="3"/>
+            <rect x="170" y="110" width="46" height="32" rx="3"/>
+            <rect x="226" y="110" width="46" height="32" rx="3"/>
+            <rect x="170" y="58" width="32" height="32" rx="3"/>
+            <rect x="240" y="58" width="32" height="32" rx="3"/>
+          </g>
+
+          <!-- el lote de la casa: relleno, para que el pin caiga adentro -->
+          <rect class="radar__casa" x="208" y="58" width="26" height="32" rx="3"/>
+        </svg>
+
+        <div class="radar__barrido"></div>
+
+        <div class="radar__marca">
+          <span class="radar__eco"></span>
+          <span class="radar__eco"></span>
+          <span class="radar__punto"></span>
+          <span class="radar__mira"></span>
+        </div>
       </div>
 
-      <address class="addr" data-bind="direccion" data-reveal>[Calle 1234, Ciudad]</address>
+      <address class="addr" data-bind="direccion" data-reveal>Casa 19</address>
       <p class="lede" data-joke="donde" data-reveal>Está más cerca de lo que estás pensando.</p>
 
       <a class="btn btn--solid" id="maps" href="#" target="_blank" rel="noopener" data-reveal>Abrir en Google Maps</a>
-      <button class="btn btn--ghost" data-next data-reveal>Ver las pruebas</button>
+      <!-- sin data-reveal: este botón no entra con el resto, espera a que el
+           radar enganche la casa (ver .btn--sigue en css/eras.css) -->
+      <button class="btn btn--sigue" data-next>Siguiente</button>
     </div>
   </section>
 
@@ -178,7 +225,7 @@
 
       <div class="gallery" id="gallery" data-reveal></div>
 
-      <p class="fineprint" data-reveal>Deslizá para ver el resto.</p>
+      <p class="fineprint" id="galeriaPie" data-reveal>Deslizá para ver el resto.</p>
       <button class="btn" data-next data-reveal>Ir al final</button>
     </div>
   </section>
@@ -219,6 +266,6 @@
 
 <audio id="track" loop preload="auto"></audio>
 
-<script type="module" src="js/app.js?v=3"></script>
+<script type="module" src="js/app.js?v=6"></script>
 </body>
 </html>
