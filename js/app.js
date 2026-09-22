@@ -97,7 +97,9 @@ if (CONFIG.lugar?.nota && !CONFIG.lugar.nota.startsWith("[")) {
   const nota = document.createElement("p");
   nota.className = "fineprint";
   nota.textContent = CONFIG.lugar.nota;
-  maps.before(nota);
+  // antes de la fila entera, no adentro: si no, la nota se mete entre los
+  // dos botones y rompe el par
+  (maps.closest(".botonera") ?? maps).before(nota);
 }
 
 // Link del grupo.

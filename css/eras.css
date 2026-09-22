@@ -607,18 +607,20 @@ body[data-era="5"]::before { opacity: 1; }
           mask-image: radial-gradient(120% 85% at 50% 42%, #000 15%, transparent 78%);
 }
 
-/* las órbitas: tres elipses en perspectiva, cada una a su ritmo */
+/* las órbitas: tres elipses en perspectiva, cada una a su ritmo.
+   El centrado va por margen negativo y no por `translate`: los anillos giran
+   con una animación de `transform`, y Safari se come el `translate` suelto
+   mientras la animación corre, así que el anillo se descolgaba a una esquina. */
 .orbita__anillos { position: absolute; inset: 0; }
 .orbita__anillos span {
   position: absolute;
   top: 50%; left: 50%;
   border: 1px solid color-mix(in oklch, var(--tele) 22%, transparent);
   border-radius: 50%;
-  translate: -50% -50%;
 }
-.orbita__anillos span:nth-child(1) { width: 128vmin; height: 128vmin; }
-.orbita__anillos span:nth-child(2) { width: 88vmin;  height: 88vmin;  border-style: dashed; }
-.orbita__anillos span:nth-child(3) { width: 52vmin;  height: 52vmin; }
+.orbita__anillos span:nth-child(1) { width: 128vmin; height: 128vmin; margin: -64vmin 0 0 -64vmin; }
+.orbita__anillos span:nth-child(2) { width: 88vmin;  height: 88vmin;  margin: -44vmin 0 0 -44vmin; border-style: dashed; }
+.orbita__anillos span:nth-child(3) { width: 52vmin;  height: 52vmin;  margin: -26vmin 0 0 -26vmin; }
 
 /* las balizas: puntos fijos de telemetría, no un cielo estrellado */
 .orbita__polvo {
@@ -700,13 +702,17 @@ body[data-era="5"]::before { opacity: 1; }
 
 /* el barrido: un cuadrado más grande que la caja, girando y recortado por
    el overflow del plano. Gira el elemento, no el gradiente: así el trabajo
-   queda en la GPU. */
+   queda en la GPU.
+   El centrado va por margen negativo (el % se mide contra el ancho del plano,
+   y el alto es igual por el aspect-ratio): con `translate` suelto, Safari lo
+   perdía al arrancar el giro y el cuadrado del barrido asomaba en una esquina
+   del plano en vez de quedar centrado y recortado en redondo. */
 .radar__barrido {
   position: absolute;
   top: 50%; left: 50%;
   width: 150%;
   aspect-ratio: 1;
-  translate: -50% -50%;
+  margin: -75% 0 0 -75%;
   border-radius: 50%;
   background: conic-gradient(
     from 0deg,
@@ -798,6 +804,28 @@ body[data-era="5"]::before { opacity: 1; }
 
 /* ---------- el botón de avanzar ---------- */
 
+/* El de Maps y el de seguir comparten fila: son el mismo par y en el celular
+   una fila cuesta la mitad de alto que dos. */
+.botonera {
+  display: flex;
+  /* stretch y no center: los dos terminan exactamente con la misma altura */
+  align-items: stretch;
+  gap: var(--s2);
+  width: 100%;
+  margin-top: var(--s2);
+  /* si la pantalla es tan angosta que no entran, prefiero que el de seguir
+     baje a su propio renglón antes que se corte contra el borde */
+  flex-wrap: wrap;
+}
+
+.botonera .btn {
+  /* el margen de arriba ya lo pone la fila */
+  margin-top: 0;
+  /* el texto largo del de Maps no puede empujar al otro fuera de la pantalla:
+     en el celular los costados se achican, en la compu quedan como siempre */
+  padding-inline: clamp(1.05rem, 3.6vw, 1.5rem);
+}
+
 /* Aparece a 1,5 s, cuando la mira ya se cerró sobre la casa: primero se ve
    dónde es, después se sigue. Guarda su lugar desde el arranque
    (visibility, no display) para que al asomar no se corra nada de abajo, y
@@ -806,12 +834,11 @@ body[data-era="5"]::before { opacity: 1; }
   border-color: var(--ink-dim);
   background: color-mix(in oklch, var(--bg-2) 55%, transparent);
   visibility: hidden;
-  /* va pegado al de Maps: son el mismo par, no dos bloques separados */
-  margin-top: 0;
   /* contra el borde derecho del bloque, alineado con el canto del plano:
      el resto de la vista se lee de izquierda a derecha y el que sigue
-     espera del lado al que se avanza */
-  align-self: flex-end;
+     espera del lado al que se avanza. margin y no align-self: así queda a la
+     derecha también si la fila se parte en dos renglones */
+  margin-left: auto;
 }
 .era--amber.is-active .btn--sigue { animation: asomar 760ms var(--ease-expo) 1500ms both; }
 
@@ -879,7 +906,6 @@ body[data-era="5"]::before { opacity: 1; }
     transform: none;
     filter: none;
   }
-  .orbita__anillos span { translate: -50% -50%; }
   .orbita__nave { animation: none !important; left: 8%; opacity: 0.4; }
   /* sin descenso no hay nada que esperar: el botón está desde el arranque */
   .btn--sigue { animation: none !important; visibility: visible; opacity: 1; transform: none; }

@@ -241,7 +241,7 @@ export function crearBola(lienzo, capaReflejos, { reducido = false, energia = nu
     activar() {
       if (activo || reducido) return;
       activo = true;
-      medir(); // la sección pudo estar escalada durante la transición
+      medir(); // al volver a la portada la pantalla pudo cambiar de tamaño
       raf = requestAnimationFrame(bucle);
     },
     desactivar() {

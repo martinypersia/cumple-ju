@@ -19,8 +19,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Chivo+Mono:wght@300..700&family=Figtree:wght@300..900&family=Fraunces:ital,opsz,wght,SOFT,WONK@1,9..144,600..900,0..100,0..1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/base.css?v=2">
-<link rel="stylesheet" href="css/eras.css?v=12">
+<link rel="stylesheet" href="css/base.css?v=3">
+<link rel="stylesheet" href="css/eras.css?v=13">
 </head>
 <body data-era="0">
 
@@ -209,10 +209,13 @@
       <address class="addr" data-bind="direccion" data-reveal>Casa 19</address>
       <p class="lede" data-joke="donde" data-reveal>Está más cerca de lo que estás pensando.</p>
 
-      <a class="btn btn--solid" id="maps" href="#" target="_blank" rel="noopener" data-reveal>Abrir en Google Maps</a>
-      <!-- sin data-reveal: este botón no entra con el resto, espera a que el
-           radar enganche la casa (ver .btn--sigue en css/eras.css) -->
-      <button class="btn btn--sigue" data-next>Siguiente</button>
+      <!-- los dos en la misma fila: el par de siempre, ahora uno al lado del otro -->
+      <div class="botonera">
+        <a class="btn btn--solid" id="maps" href="#" target="_blank" rel="noopener" data-reveal>Abrir en Google Maps</a>
+        <!-- sin data-reveal: este botón no entra con el resto, espera a que el
+             radar enganche la casa (ver .btn--sigue en css/eras.css) -->
+        <button class="btn btn--sigue" data-next>Siguiente</button>
+      </div>
     </div>
   </section>
 

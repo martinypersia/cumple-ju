@@ -128,10 +128,15 @@ body {
   overflow-x: hidden;
   opacity: 0;
   visibility: hidden;
-  transform: scale(0.985);
+  /* Sin transform acá a propósito: las eras 2 y 3 cuelgan de la sección una
+     capa de fondo `position: fixed` (.casitas, .orbita). Un transform en el
+     ancestro las convierte en fijas respecto a la sección y no al viewport,
+     y al entrar y salir de la era ese punto de referencia cambia a mitad de
+     la transición. Safari dejaba ahí un resto rectangular de la capa
+     pintado encima del fondo. El zoom de entrada vive ahora en .era__inner,
+     que no tiene hijos fijos. */
   transition:
     opacity 620ms var(--ease-quart),
-    transform 620ms var(--ease-expo),
     visibility 0s linear 620ms;
   padding:
     max(var(--s5), env(safe-area-inset-top))
@@ -142,12 +147,20 @@ body {
 .era.is-active {
   opacity: 1;
   visibility: visible;
-  transform: none;
   transition:
     opacity 620ms var(--ease-quart),
-    transform 900ms var(--ease-expo),
     visibility 0s;
 }
+
+/* Mientras la era no se ve, sus capas de fondo no existen. Heredar
+   visibility:hidden debería alcanzar, pero son capas que el celular manda a
+   la GPU (grilla, casitas, reflector) y Safari las sigue pintando de a
+   ratos. Con display:none no hay resto posible.
+   Quedan afuera el agua y la bola de la portada: su tamaño lo miden los
+   canvas en JS y con display:none medirían cero. */
+.era:not(.is-active) .casitas,
+.era:not(.is-active) .orbita,
+.era:not(.is-active) .spotlight { display: none; }
 
 .era__inner {
   position: relative;
@@ -158,6 +171,14 @@ body {
   align-items: flex-start;
   gap: var(--s3);
   margin: auto 0;
+  /* el zoom de entrada: acá y no en .era (ver arriba) */
+  transform: scale(0.985);
+  transition: transform 620ms var(--ease-expo);
+}
+
+.era.is-active .era__inner {
+  transform: none;
+  transition: transform 900ms var(--ease-expo);
 }
 
 .era__inner--center { align-items: center; text-align: center; }
@@ -380,6 +401,6 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 120ms !important;
   }
-  .era { transform: none; }
+  .era__inner { transform: none; }
   .era.is-active [data-reveal] { animation: none; }
 }
