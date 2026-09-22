@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Chivo+Mono:wght@300..700&family=Figtree:wght@300..900&family=Fraunces:ital,opsz,wght,SOFT,WONK@1,9..144,600..900,0..100,0..1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/base.css?v=2">
-<link rel="stylesheet" href="css/eras.css?v=10">
+<link rel="stylesheet" href="css/eras.css?v=12">
 </head>
 <body data-era="0">
 
@@ -219,7 +219,7 @@
   <!-- 4 - LOVE ON TOUR - GALERIA -->
   <section class="era era--stage" id="era-4" data-era="4" hidden aria-label="Galería de fotos">
     <div class="spotlight" id="spotlight" aria-hidden="true"></div>
-    <div class="era__inner era__inner--wide">
+    <div class="era__inner era__inner--wide era__inner--center">
       <p class="overline" data-reveal>Los anfitriones</p>
       <h2 class="display display--lg" data-joke="galeria" data-reveal>Juli + Lucas</h2> 
 
@@ -238,9 +238,14 @@
         <div class="ball__glow"></div>
       </div>
 
-      <p class="overline" data-reveal>Disco, occasionally</p>
       <h2 class="display display--xl" data-reveal>La previa<br>empieza acá</h2>
-      <p class="lede" data-joke="cierre" data-reveal>Entrar al grupo cuenta como confirmar. No hay formulario, no hay lista, no hay excusa.</p>
+      <!-- decorativas: el botón de abajo ya dice qué hacer, así que no las
+           anuncia un lector de pantalla -->
+      <div class="flechas" data-reveal aria-hidden="true">
+        <svg class="flecha" viewBox="0 0 24 14"><path d="M2 2 12 12 22 2"/></svg>
+        <svg class="flecha" viewBox="0 0 24 14"><path d="M2 2 12 12 22 2"/></svg>
+        <svg class="flecha" viewBox="0 0 24 14"><path d="M2 2 12 12 22 2"/></svg>
+      </div>
 
       <a class="btn btn--hero btn--wa" id="wa" href="#" target="_blank" rel="noopener" data-reveal>
         <span class="btn__icon" aria-hidden="true">
@@ -266,6 +271,6 @@
 
 <audio id="track" loop preload="auto"></audio>
 
-<script type="module" src="js/app.js?v=6"></script>
+<script type="module" src="js/app.js?v=7"></script>
 </body>
 </html>

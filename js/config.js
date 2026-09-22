@@ -40,7 +40,7 @@ export const CONFIG = {
   // Si el array queda vacío, se muestran marcos vacíos con instrucciones.
   // Ejemplo: [{ src: "assets/fotos/01.webp", alt: "Juli en el after, 2024" }]
   fotos: [
-    { src: "assets/fotos/web/luju.webp", alt: "Juli y Lucas" },
+    { src: "assets/fotos/web/luju.webp?v=2", alt: "Juli y Lucas" },
   ],
 
   // La foto que va adentro del círculo de la segunda pantalla.

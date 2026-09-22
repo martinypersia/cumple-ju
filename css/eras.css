@@ -920,14 +920,50 @@ body[data-era="5"]::before { opacity: 1; }
 }
 .gallery::-webkit-scrollbar { display: none; }
 
-/* Una sola foto: sin nada que deslizar, se centra y ocupa todo el ancho
-   que le deja la pantalla. */
+/* Una sola foto: sin nada que deslizar, se centra, se agranda y se recorta
+   en corazón.
+
+   La forma es una máscara SVG. El viewBox es el bounding box exacto del
+   corazón (6 6 88 85), no el 0 0 100 100 del dibujo, para que llene el
+   marco sin aire alrededor; la foto viene recortada en esa misma
+   proporción, así que el corazón no se deforma.
+
+   La máscara va en la imagen y la sombra en el marco, separadas a
+   propósito: el orden del render es filtro y después máscara, de modo que
+   si las dos vivieran en el mismo elemento el corazón recortaría también
+   su propia sombra y no se vería ninguna. */
 .gallery--una {
+  --corazon: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='6%206%2088%2085'%3E%3Cpath%20d='M50%2091C50%2091%206%2063%206%2033%206%2016%2019%206%2032%206%2041%206%2047%2011%2050%2018%2053%2011%2059%206%2068%206%2081%206%2094%2016%2094%2033%2094%2063%2050%2091%2050%2091Z'%20fill='%23fff'/%3E%3C/svg%3E");
   justify-content: center;
   overflow-x: visible;
   scroll-snap-type: none;
 }
-.gallery--una .shot { flex-basis: min(80vw, 18.5rem); }
+
+.gallery--una .shot {
+  flex-basis: min(86vw, 20rem);
+  aspect-ratio: 88 / 85;
+  /* el marco rectangular sobra: lo que se ve es el corazón */
+  border-radius: 0;
+  box-shadow: none;
+  overflow: visible;
+  transform: none;
+  filter:
+    drop-shadow(0 1.1rem 1.5rem oklch(0 0 0 / 0.55))
+    drop-shadow(0 0 1.4rem color-mix(in oklch, var(--accent) 45%, transparent));
+}
+
+.gallery--una .shot img {
+  -webkit-mask-image: var(--corazon);
+          mask-image: var(--corazon);
+  -webkit-mask-size: 100% 100%;
+          mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+}
+
+/* el giro de la pila de fotos no aplica acá, pero el impulso al tocarla sí */
+.gallery--una .shot:hover,
+.gallery--una .shot:focus-within { transform: translateY(-0.4rem); }
 
 .shot {
   position: relative;
@@ -996,6 +1032,42 @@ body[data-era="5"]::before { opacity: 1; }
   transition: transform 120ms linear, opacity 120ms linear;
 }
 
+/* ---------- las flechas que caen sobre el botón ---------- */
+
+/* Tres chevrons que bajan uno atrás del otro y se apagan justo encima del
+   botón: el cierre ya no explica nada, empuja. Van en el rosa de la era y
+   no reciben el dedo: el que se toca es el botón. */
+.flechas {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  /* pegadas al botón, para que se lea a qué apuntan */
+  margin-bottom: calc(var(--s3) * -0.6);
+  pointer-events: none;
+}
+
+.flecha {
+  width: 1.75rem;
+  aspect-ratio: 24 / 14;
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 0.5rem color-mix(in oklch, var(--accent) 55%, transparent));
+  animation: caerFlecha 1.8s var(--ease-quart) infinite;
+}
+.flecha:nth-child(2) { animation-delay: 0.18s; }
+.flecha:nth-child(3) { animation-delay: 0.36s; }
+
+@keyframes caerFlecha {
+  0%   { opacity: 0;    transform: translateY(-0.5rem); }
+  35%  { opacity: 0.95; }
+  70%  { opacity: 0.95; transform: translateY(0.35rem); }
+  100% { opacity: 0;    transform: translateY(0.7rem); }
+}
+
 .btn--wa {
   background: oklch(0.72 0.175 152);
   color: oklch(0.16 0.04 152);
@@ -1012,4 +1084,6 @@ body[data-era="5"]::before { opacity: 1; }
   .ball__glow { transform: none; opacity: 0.6; }
   .colgante { animation: none; }
   .casitas { display: none; }
+  /* quietas, pero siguen señalando el botón */
+  .flecha { animation: none !important; opacity: 0.95; transform: none; }
 }
